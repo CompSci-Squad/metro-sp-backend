@@ -17,11 +17,11 @@ class UsersController:
         self.router.put("/{username}")(self.update_user)
         self.router.delete("/{username}")(self.delete_user)
 
-    def create_user(self, data: UserCreateDTO):
+    async def create_user(self, data: UserCreateDTO):
         return self.__creator_service.create(data)
 
-    def update_user(self, username: str, email: str):
-        return {"message": "User updated successfully"}
+    async def update_user(self, username: str, email: str):
+        return {"message": "User {username} updated successfully"}
 
-    def delete_user(self, username: str):
-        return {"message": "User deleted successfully"}
+    async def delete_user(self, username: str):
+        return {"message": "User {username} deleted successfully"}
