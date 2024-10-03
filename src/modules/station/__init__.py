@@ -1,3 +1,3 @@
-from .station_controller import ClientsController
+from .station_controller import StationsController
 
 __all__ = ['ClientsController']
