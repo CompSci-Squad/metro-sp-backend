@@ -1,0 +1,24 @@
+# Use postgres and dynamodb-local containers
+version: '3.1'
+
+services:
+
+  # PostgreSQL Service
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: project
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports: 
+      - "5432:5432"
+
+  # DynamoDB Local Service
+  dynamodb:
+    image: amazon/dynamodb-local
+    container_name: dynamodb_local
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+
