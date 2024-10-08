@@ -5,10 +5,15 @@ import { BaseEntity } from "../../../shared/entities/base.entity";
 import { UserPermissions } from "../enums/user-permissions.enum";
 
 import { StationEntity } from "../../station/entities/station.entity";
+import { UserRepository } from "../repositories/user.repository";
 
-@Entity()
+@Entity({ repository: () => UserRepository })
 export class UserEntity extends BaseEntity {
+
 	@Property()
+	name!: string;
+
+	@Property({ unique: true })
 	email!: string;
 
 	@Property()
@@ -18,7 +23,7 @@ export class UserEntity extends BaseEntity {
 	cpf!: string;
 
 	@Enum({ items: () => UserPermissions, array: true })
-	permissions!: UserPermissions;
+	permissions!: UserPermissions[];
 
 	@ManyToOne()
 	station!: StationEntity;

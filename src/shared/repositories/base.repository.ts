@@ -22,7 +22,7 @@ export abstract class BaseRepository<T extends object, ID> {
     if (!entity) {
       throw new Error('Entity not found');
     }
-    this.entityRepository.assign(entity, data)
+    this.entityRepository.assign(entity, data as any)
     await this.em.persistAndFlush(entity);
     return entity;
   }

@@ -1,34 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { StationService } from './station.service';
-import { CreateStationDto } from './dto/create-station.dto';
-import { UpdateStationDto } from './dto/update-station.dto';
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete,
+} from "@nestjs/common";
+import { CreateStationDto } from "./dto/create-station.dto";
+import { UpdateStationDto } from "./dto/update-station.dto";
+import { CreatorService } from "./services/creator.service";
+import { IndexerService } from "./services/indexer.service";
+import { FinderService } from './services/finder.service'
+import { UpdaterService } from './services/updater.service'
+import { RemoverService } from './services/remover.service'
 
-@Controller('station')
+
+@Controller("station")
 export class StationController {
-  constructor(private readonly stationService: StationService) {}
+	constructor(
+		private readonly creatorService: CreatorService,
+		private readonly indexerService: IndexerService,
+    private readonly finderService: FinderService,
+    private readonly updaterService: UpdaterService,
+    private readonly removerService: RemoverService
+	) {}
 
-  @Post()
-  create(@Body() createStationDto: CreateStationDto) {
-    return this.stationService.create(createStationDto);
-  }
+	@Post()
+	public async create(@Body() createStationDto: CreateStationDto) {
+		return this.creatorService.create(createStationDto);
+	}
 
-  @Get()
-  findAll() {
-    return this.stationService.findAll();
-  }
+	@Get()
+	public async findAll() {
+		return this.indexerService.index();
+	}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.stationService.findOne(+id);
-  }
+	@Get(":id")
+	public async findOne(@Param("id") id: string) {
+		return this.finderService.findById(+id);
+	}
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStationDto: UpdateStationDto) {
-    return this.stationService.update(+id, updateStationDto);
-  }
+	@Patch(":id")
+	public async update(@Param("id") id: string, @Body() updateStationDto: UpdateStationDto) {
+		return this.updaterService.update(+id, updateStationDto);
+	}
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stationService.remove(+id);
-  }
+	@Delete(":id")
+	public async remove(@Param("id") id: string) {
+		return this.removerService.remove(+id);
+	}
 }

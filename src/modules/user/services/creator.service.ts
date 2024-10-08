@@ -1,12 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { UserRepository } from '../repositories/user.repository';
+import { UserEntity } from '../entities/user.entity';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class CreatorService {
-  constructor() {}
+  constructor(
+    private readonly userRepository: UserRepository
+  ) {}
 
-  public async create(): Promise<string> {
+  public async create(dto: CreateUserDto): Promise<UserEntity> {
     try {
-      return 'usuario criado';
-    } catch (error) {}
+      return await this.userRepository.create(dto)
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 }

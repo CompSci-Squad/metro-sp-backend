@@ -1,7 +1,7 @@
 import { Opt, PrimaryKey, Property } from "@mikro-orm/core";
 
 export abstract class BaseEntity {
-	@PrimaryKey()
+	@PrimaryKey({ autoincrement: true })
 	id!: number;
 
 	@Property()
