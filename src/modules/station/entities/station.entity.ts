@@ -23,6 +23,6 @@ export class StationEntity extends BaseEntity {
 	@Property()
 	closingTime: Date;
 
-	@ManyToMany(() => UserEntity, user => user.stations)
+	@ManyToMany({ entity: () => UserEntity })
 	users = new Collection<UserEntity>(this);
 }

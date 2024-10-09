@@ -12,8 +12,8 @@ export default defineConfig({
   user: process.env.DB_USER ?? '',
   password: process.env.DB_PASSWORD ?? '',
   dbName: 'coreDb',
-  entities: ['dist/**/*.entity.js'],
-  entitiesTs: ['src/**/*.entity.ts'],
+  entities: ['./dist/**/*.entity.js'],
+  entitiesTs: ['./src/**/*.entity.ts'],
   debug: true,
   highlighter: new SqlHighlighter(),
   metadataProvider: TsMorphMetadataProvider,
@@ -21,6 +21,8 @@ export default defineConfig({
   registerRequestContext: false,
   extensions: [Migrator, EntityGenerator],
   migrations: {
-    path: 'database/migrations'
+    path: 'dist/shared/database/migrations',
+    pathTs: 'src/shared/database/migrations',
+    glob: '!(*.d).{js,ts}',
   }
 });

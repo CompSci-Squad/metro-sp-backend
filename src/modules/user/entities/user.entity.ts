@@ -25,6 +25,6 @@ export class UserEntity extends BaseEntity {
 	@Enum({ items: () => UserPermissions, array: true })
 	permissions!: UserPermissions[];
 
-	@ManyToMany(() => StationEntity, station => station.users, { mappedBy: 'users' })
+	@ManyToMany({entity: () => StationEntity, mappedBy: 'users' })
 	stations = new Collection<StationEntity>(this);
 }

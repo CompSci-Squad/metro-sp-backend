@@ -7,19 +7,14 @@ import {
 import { MikroORM } from "@mikro-orm/postgresql";
 import { MikroOrmMiddleware, MikroOrmModule } from "@mikro-orm/nestjs";
 import { StationModule } from "./modules/station/station.module";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { MikroOrmConfigService } from "./shared/services/mikro-orm-config.service";
+import { ConfigModule } from "@nestjs/config";
 import { UserModule } from "./modules/user/user.module";
 import { GlobalModule } from "./modules/global/global.module";
 
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
-		MikroOrmModule.forRootAsync({
-			useClass: MikroOrmConfigService,
-			imports: [ConfigModule],
-			inject: [ConfigService]
-		}),
+		MikroOrmModule.forRoot(),
 		GlobalModule,
 		StationModule,
 		UserModule
