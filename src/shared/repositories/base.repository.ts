@@ -15,8 +15,9 @@ import { BaseEntity } from '../entities/base.entity';
 export abstract class BaseRepository<
   T extends BaseEntity,
 > extends EntityRepository<T> {
-  async createEntity(data: T): Promise<T> {
-    const entity = this.create(data as T);
+  async createEntity(info: Partial<T>): Promise<T> {
+    console.log(info)
+    const entity = this.create(info as T);
     await this.em.persistAndFlush(entity);
     return entity;
   }

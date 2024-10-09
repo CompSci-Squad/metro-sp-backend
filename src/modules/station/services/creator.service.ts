@@ -8,7 +8,7 @@ export class CreatorService {
 
     public async create(dto: CreateStationDto) {
         try {
-            return await this.stationRepository.create(dto)
+            return await this.stationRepository.createEntity(dto)
         } catch (error) {
             throw new InternalServerErrorException(error)
         }

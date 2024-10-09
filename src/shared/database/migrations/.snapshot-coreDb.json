@@ -44,6 +44,66 @@
           "nullable": true,
           "length": 6,
           "mappedType": "datetime"
+        }
+      },
+      "name": "base_entity",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "base_entity_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": false,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
         },
         "name": {
           "name": "name",
@@ -83,25 +143,35 @@
           "length": 255,
           "mappedType": "string"
         },
+        "street_number": {
+          "name": "street_number",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
         "opening_time": {
           "name": "opening_time",
-          "type": "timestamptz",
+          "type": "time",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "length": 6,
-          "mappedType": "datetime"
+          "mappedType": "time"
         },
         "closing_time": {
           "name": "closing_time",
-          "type": "timestamptz",
+          "type": "time",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "length": 6,
-          "mappedType": "datetime"
+          "mappedType": "time"
         }
       },
       "name": "station",

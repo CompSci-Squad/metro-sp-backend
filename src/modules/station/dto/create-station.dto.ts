@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
-	IsDateString,
 	IsLatitude,
 	IsLongitude,
 	IsNotEmpty,
 	IsNumber,
 	IsString,
+	Matches,
 } from "class-validator";
 
 export class CreateStationDto {
@@ -30,14 +30,19 @@ export class CreateStationDto {
 	address: string;
 
 	@ApiProperty()
+	@IsNotEmpty()
+	@IsString()
+	streetNumber: string;
+
+	@ApiProperty()
     @IsNotEmpty()
     @IsString()
-	@IsDateString({ strict: false })
+	@Matches(/^([0-1]\d|2[0-3]):([0-5]\d)$/, { message: 'Time must be in HH:MM format' })
 	openingTime: string;
 
 	@ApiProperty()
     @IsNotEmpty()
     @IsString()
-	@IsDateString({ strict: false })
+	@Matches(/^([0-1]\d|2[0-3]):([0-5]\d)$/, { message: 'Time must be in HH:MM format' })
 	closingTime: string;
 }
