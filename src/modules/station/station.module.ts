@@ -12,7 +12,6 @@ import { UserEntity } from "../user/entities/user.entity";
 import { StationEntity } from "./entities/station.entity";
 
 @Module({
-  imports: [MikroOrmModule.forFeature([UserEntity, StationEntity])],
 	controllers: [StationController],
 	providers: [
 		CreatorService,

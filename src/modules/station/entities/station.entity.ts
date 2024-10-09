@@ -1,9 +1,9 @@
-import { Property, Entity, OneToMany, Collection } from "@mikro-orm/core";
+import { Property, Entity, OneToMany, Collection, Rel, ManyToMany } from "@mikro-orm/postgresql";
 import { BaseEntity } from "../../../shared/entities/base.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 import { StationRepository } from "../repositories/station.repository";
 
-@Entity({ repository: () => StationRepository })
+@Entity({ repository: () => StationRepository, tableName: 'station' })
 export class StationEntity extends BaseEntity {
 	@Property()
 	name: string;
@@ -23,6 +23,6 @@ export class StationEntity extends BaseEntity {
 	@Property()
 	closingTime: Date;
 
-	@OneToMany(() => UserEntity, user => user.station)
+	@ManyToMany(() => UserEntity, user => user.stations)
 	users = new Collection<UserEntity>(this);
 }

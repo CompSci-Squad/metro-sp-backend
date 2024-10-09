@@ -7,21 +7,33 @@ import {
 import { MikroORM } from "@mikro-orm/postgresql";
 import { MikroOrmMiddleware, MikroOrmModule } from "@mikro-orm/nestjs";
 import { StationModule } from "./modules/station/station.module";
-import { PostgreSqlMikroORM } from "@mikro-orm/postgresql/PostgreSqlMikroORM"; 
-import mikroOrmConfig from "./shared/config/mikro-orm.config";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { MikroOrmConfigService } from "./shared/services/mikro-orm-config.service";
+import { UserModule } from "./modules/user/user.module";
+import { GlobalModule } from "./modules/global/global.module";
 
 @Module({
-	imports: [StationModule, MikroOrmModule.forRoot(mikroOrmConfig), ConfigModule.forRoot()],
+	imports: [
+		ConfigModule.forRoot(),
+		MikroOrmModule.forRootAsync({
+			useClass: MikroOrmConfigService,
+			imports: [ConfigModule],
+			inject: [ConfigService]
+		}),
+		GlobalModule,
+		StationModule,
+		UserModule
+	]
 })
-export class AppModule implements OnModuleInit {
-	constructor(private readonly orm: PostgreSqlMikroORM) {}
+export class AppModule implements OnModuleInit, NestModule {
+	private orm: MikroORM
 
 	async onModuleInit(): Promise<void> {
+		this.orm = await MikroORM.init();
 		await this.orm.getMigrator().up();
 	}
 
-	// configure(consumer: MiddlewareConsumer) {
-	// 	consumer.apply(MikroOrmMiddleware).forRoutes("*");
-	// }
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(MikroOrmMiddleware).forRoutes("*");
+	}
 }

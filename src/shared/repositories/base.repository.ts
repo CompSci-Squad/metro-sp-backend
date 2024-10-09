@@ -1,6 +1,7 @@
-import { EntityData, EntityDTO, EntityManager, EntityRepository, FilterQuery, FindAllOptions, FromEntityType, RequiredEntityData, wrap } from '@mikro-orm/core'
+import { EntityData, EntityDTO, EntityManager, EntityRepository, FilterQuery, FindAllOptions, FromEntityType, RequiredEntityData, wrap } from '@mikro-orm/postgresql'
+import { BaseEntity } from '../entities/base.entity';
 
-export abstract class BaseRepository<T extends object, ID> {
+export abstract class BaseRepository<T extends BaseEntity, ID> {
   constructor(
     protected readonly em: EntityManager,
     protected readonly entityRepository: EntityRepository<T>,

@@ -1,4 +1,4 @@
-import { Opt, PrimaryKey, Property } from "@mikro-orm/core";
+import { Opt, PrimaryKey, Property } from "@mikro-orm/postgresql";
 
 export abstract class BaseEntity {
 	@PrimaryKey({ autoincrement: true })
