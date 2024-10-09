@@ -1,25 +1,23 @@
-import { Module } from "@nestjs/common";
-import { StationController } from "./station.controller";
-import { CreatorService } from "./services/creator.service";
-import { StationRepository } from "./repositories/station.repository";
-import { IndexerService } from "./services/indexer.service";
-import { FinderService } from "./services/finder.service";
-import { UpdaterService } from "./services/updater.service";
-import { RemoverService } from "./services/remover.service";
-import { MikroORM } from "@mikro-orm/postgresql";
-import { MikroOrmModule } from "@mikro-orm/nestjs";
-import { UserEntity } from "../user/entities/user.entity";
-import { StationEntity } from "./entities/station.entity";
+import { Module } from '@nestjs/common';
+import { StationController } from './station.controller';
+import { CreatorService } from './services/creator.service';
+import { StationRepository } from './repositories/station.repository';
+import { IndexerService } from './services/indexer.service';
+import { FinderService } from './services/finder.service';
+import { UpdaterService } from './services/updater.service';
+import { RemoverService } from './services/remover.service';
+import { MikroOrmMiddleware, MikroOrmModule } from '@mikro-orm/nestjs';
+import { StationEntity } from './entities/station.entity';
 
 @Module({
-	controllers: [StationController],
-	providers: [
-		CreatorService,
-		StationRepository,
-		IndexerService,
-		FinderService,
-		UpdaterService,
-		RemoverService,
-	],
+  imports: [MikroOrmModule.forFeature([StationEntity])],
+  controllers: [StationController],
+  providers: [
+    CreatorService,
+    IndexerService,
+    FinderService,
+    UpdaterService,
+    RemoverService,
+  ],
 })
 export class StationModule {}

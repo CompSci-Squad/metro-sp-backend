@@ -1,34 +1,42 @@
-import { EntityData, EntityDTO, EntityManager, EntityRepository, FilterQuery, FindAllOptions, FromEntityType, RequiredEntityData, wrap } from '@mikro-orm/postgresql'
+import {
+  EntityData,
+  EntityDTO,
+  EntityManager,
+  EntityName,
+  EntityRepository,
+  FilterQuery,
+  FindAllOptions,
+  FromEntityType,
+  RequiredEntityData,
+  wrap,
+} from '@mikro-orm/postgresql';
 import { BaseEntity } from '../entities/base.entity';
 
-export abstract class BaseRepository<T extends BaseEntity, ID> {
-  constructor(
-    protected readonly em: EntityManager,
-    protected readonly entityRepository: EntityRepository<T>,
-  ) {}
-
-  async create(data: RequiredEntityData<T>): Promise<T> {
-    const entity = this.entityRepository.create(data);
+export abstract class BaseRepository<
+  T extends BaseEntity,
+> extends EntityRepository<T> {
+  async createEntity(data: T): Promise<T> {
+    const entity = this.create(data as T);
     await this.em.persistAndFlush(entity);
     return entity;
   }
 
-  async findById(id: ID): Promise<T | null> {
+  async findById(id: number): Promise<T | null> {
     const query: FilterQuery<T> = { id } as FilterQuery<T>;
-    return this.entityRepository.findOneOrFail(query);
+    return this.findOneOrFail(query);
   }
 
-  async update(id: ID, data: EntityData<T>): Promise<T> {
+  async update(id: number, data: EntityData<T>): Promise<T> {
     const entity = await this.findById(id);
     if (!entity) {
       throw new Error('Entity not found');
     }
-    this.entityRepository.assign(entity, data as any)
+    this.assign(entity, data as any);
     await this.em.persistAndFlush(entity);
     return entity;
   }
 
-  async softDelete(id: ID): Promise<void> {
+  async softDelete(id: number): Promise<void> {
     const entity = await this.findById(id);
     if (!entity) {
       throw new Error('Entity not found');
@@ -37,12 +45,13 @@ export abstract class BaseRepository<T extends BaseEntity, ID> {
     await this.em.flush();
   }
 
-  async findAll(query?: FindAllOptions<T>): Promise<T[]> {
-    return this.entityRepository.findAll(query);
+  async findAllEntities(query?: FindAllOptions<T>): Promise<T[]> {
+    console.log(this);
+    return await this.findAll(query);
   }
 
   async findAllIncludingSoftDeleted(): Promise<T[]> {
     // Disable the notDeleted filter for this specific query
-    return this.entityRepository.findAll({ filters: { notDeleted: false } });
+    return this.findAll({ filters: { notDeleted: false } });
   }
 }
