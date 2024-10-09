@@ -33,7 +33,6 @@ export class StationController {
 
   @Get()
   public async findAll() {
-    console.log('aqui');
     return this.indexerService.index();
   }
 

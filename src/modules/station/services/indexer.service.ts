@@ -4,14 +4,10 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 @Injectable()
 export class IndexerService {
-  constructor(
-    private readonly stationRepository: StationRepository,
-    private readonly em: EntityManager,
-  ) {}
+  constructor(private readonly stationRepository: StationRepository) {}
 
   public async index() {
     try {
-      console.log('aqui, 2');
       return await this.stationRepository.findAllEntities();
     } catch (error) {
       throw new InternalServerErrorException(error);

@@ -16,7 +16,6 @@ export abstract class BaseRepository<
   T extends BaseEntity,
 > extends EntityRepository<T> {
   async createEntity(info: Partial<T>): Promise<T> {
-    console.log(info)
     const entity = this.create(info as T);
     await this.em.persistAndFlush(entity);
     return entity;
@@ -47,7 +46,6 @@ export abstract class BaseRepository<
   }
 
   async findAllEntities(query?: FindAllOptions<T>): Promise<T[]> {
-    console.log(this);
     return await this.findAll(query);
   }
 
