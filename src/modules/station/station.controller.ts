@@ -14,6 +14,7 @@ import { IndexerService } from './services/indexer.service';
 import { FinderService } from './services/finder.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
+import { FindOneParamsDto } from './dto/find-one-params.dto';
 
 @Controller('station')
 export class StationController {
@@ -37,20 +38,20 @@ export class StationController {
   }
 
   @Get(':id')
-  public async findOne(@Param('id') id: string) {
-    return this.finderService.findById(+id);
+  public async findOne(@Param() dto: FindOneParamsDto) {
+    return this.finderService.findById(dto.id);
   }
 
   @Patch(':id')
   public async update(
-    @Param('id') id: string,
+    @Param() dto: FindOneParamsDto,
     @Body() updateStationDto: UpdateStationDto,
   ) {
-    return this.updaterService.update(+id, updateStationDto);
+    return this.updaterService.update(dto.id, updateStationDto);
   }
 
   @Delete(':id')
-  public async remove(@Param('id') id: string) {
-    return this.removerService.remove(+id);
+  public async remove(@Param() dto: FindOneParamsDto) {
+    return this.removerService.remove(dto.id);
   }
 }
