@@ -1,15 +1,13 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
-import { UserEntity } from '../entities/user.entity';
-import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
-export class CreatorService {
+export class IndexerService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async create(dto: CreateUserDto): Promise<UserEntity> {
+  public async index() {
     try {
-      return await this.userRepository.createEntity(dto);
+      return await this.userRepository.findAllEntities();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

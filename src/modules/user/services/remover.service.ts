@@ -3,16 +3,16 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { StationRepository } from '../repositories/station.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { NotFoundError } from '@mikro-orm/postgresql';
 
 @Injectable()
-export class FinderService {
-  constructor(private readonly stationRepository: StationRepository) {}
+export class RemoverService {
+  constructor(private readonly userRepository: UserRepository) {}
 
-  public async findById(id: number) {
+  public async remove(id: number) {
     try {
-      return await this.stationRepository.findById(id);
+      return await this.userRepository.softDelete(id);
     } catch (error) {
       if (error instanceof NotFoundError) throw new NotFoundException();
       throw new InternalServerErrorException(error);
