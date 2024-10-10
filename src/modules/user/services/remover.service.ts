@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
@@ -9,6 +13,7 @@ export class RemoverService {
     try {
       return await this.userRepository.softDelete(id);
     } catch (error) {
+      if (error.name === 'NotFoundError') throw new NotFoundException();
       throw new InternalServerErrorException(error);
     }
   }

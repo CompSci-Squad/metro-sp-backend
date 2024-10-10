@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
@@ -10,6 +14,7 @@ export class UpdaterService {
     try {
       return await this.userRepository.update(id, dto);
     } catch (error) {
+      if (error.name === 'NotFoundError') throw new NotFoundException();
       throw new InternalServerErrorException(error);
     }
   }
