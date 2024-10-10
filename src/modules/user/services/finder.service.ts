@@ -3,15 +3,15 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { StationRepository } from '../repositories/station.repository';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class FinderService {
-  constructor(private readonly stationRepository: StationRepository) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   public async findById(id: number) {
     try {
-      return await this.stationRepository.findById(id);
+      return await this.userRepository.findById(id);
     } catch (error) {
       if (error.name === 'NotFoundError') throw new NotFoundException();
       throw new InternalServerErrorException(error);

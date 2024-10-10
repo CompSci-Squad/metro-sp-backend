@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { CreatorService } from './services';
-import { UserEntity } from './entities/user.entity';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { StationEntity } from '../station/entities/station.entity';
+import { IndexerService } from './services/indexer.service';
+import { FinderService } from './services/finder.service';
+import { UpdaterService } from './services/updater.service';
+import { RemoverService } from './services/remover.service';
 
 @Module({
   controllers: [UserController],
-  providers: [CreatorService],
+  providers: [
+    CreatorService,
+    IndexerService,
+    FinderService,
+    UpdaterService,
+    RemoverService,
+  ],
 })
 export class UserModule {}
