@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { NotFoundError } from '@mikro-orm/postgresql';
 
 @Injectable()
 export class UpdaterService {
@@ -14,7 +15,7 @@ export class UpdaterService {
     try {
       return await this.userRepository.update(id, dto);
     } catch (error) {
-      if (error.name === 'NotFoundError') throw new NotFoundException();
+      if (error instanceof NotFoundError) throw new NotFoundException();
       throw new InternalServerErrorException(error);
     }
   }

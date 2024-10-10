@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
+import { NotFoundError } from '@mikro-orm/postgresql';
 
 @Injectable()
 export class RemoverService {
@@ -13,7 +14,7 @@ export class RemoverService {
     try {
       return await this.userRepository.softDelete(id);
     } catch (error) {
-      if (error.name === 'NotFoundError') throw new NotFoundException();
+      if (error instanceof NotFoundError) throw new NotFoundException();
       throw new InternalServerErrorException(error);
     }
   }

@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { StationRepository } from '../repositories/station.repository';
+import { NotFoundError } from '@mikro-orm/postgresql';
 
 @Injectable()
 export class FinderService {
@@ -13,7 +14,7 @@ export class FinderService {
     try {
       return await this.stationRepository.findById(id);
     } catch (error) {
-      if (error.name === 'NotFoundError') throw new NotFoundException();
+      if (error instanceof NotFoundError) throw new NotFoundException();
       throw new InternalServerErrorException(error);
     }
   }
