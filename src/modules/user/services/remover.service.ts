@@ -1,15 +1,13 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
-import { UserEntity } from '../entities/user.entity';
-import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
-export class CreatorService {
+export class RemoverService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async create(dto: CreateUserDto): Promise<UserEntity> {
+  public async remove(id: number) {
     try {
-      return await this.userRepository.createEntity(dto);
+      return await this.userRepository.softDelete(id);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
