@@ -6,6 +6,7 @@ import {
   EntityRepository,
   FilterQuery,
   FindAllOptions,
+  FindOptions,
   FromEntityType,
   RequiredEntityData,
   wrap,
@@ -45,8 +46,8 @@ export abstract class BaseRepository<
     await this.em.flush();
   }
 
-  async findAllEntities(query?: FindAllOptions<T>): Promise<T[]> {
-    return await this.findAll(query);
+  async findAllEntities( options?: FindAllOptions<T>): Promise<T[]> {
+    return await this.findAll(options);
   }
 
   async findAllIncludingSoftDeleted(): Promise<T[]> {

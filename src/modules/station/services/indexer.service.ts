@@ -8,7 +8,7 @@ export class IndexerService {
 
   public async index() {
     try {
-      return await this.stationRepository.findAllEntities();
+      return await this.stationRepository.findAllWithUsers();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
