@@ -1,16 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { StationRepository } from '../repositories/station.repository';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { BaseIndexerService } from 'src/shared/services/base-indexer.service';
+import { StationEntity } from '../entities/station.entity';
 
 @Injectable()
-export class IndexerService {
-  constructor(private readonly stationRepository: StationRepository) {}
-
-  public async index() {
-    try {
-      return await this.stationRepository.findAllWithUsers();
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
-  }
-}
+export class IndexerService extends BaseIndexerService<StationEntity> {}

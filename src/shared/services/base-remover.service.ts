@@ -5,7 +5,6 @@ import {
 } from "@nestjs/common";
 import { NotFoundError } from "@mikro-orm/postgresql";
 import { BaseRepository } from "../repositories/base.repository";
-import { BaseFinderService } from "./base-finder.service";
 import { BaseEntity } from "../entities/base.entity";
 
 export abstract class BaseRemoverService<T extends BaseEntity> {
