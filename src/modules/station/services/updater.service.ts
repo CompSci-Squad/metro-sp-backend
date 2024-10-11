@@ -1,18 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { StationRepository } from "../repositories/station.repository";
 import { UpdateStationDto } from "../dto/update-station.dto";
-import { NotFoundError } from "@mikro-orm/postgresql";
+import { BaseUpdaterService } from "src/shared/services/base-updater.service";
+import { StationEntity } from "../entities/station.entity";
 
 @Injectable()
-export class UpdaterService {
-	constructor(private readonly stationRepository: StationRepository) {}
-
-	public async update(id: number, dto: UpdateStationDto) {
-		try {
-			return await this.stationRepository.update(id, dto);
-		} catch (error) {
-			if (error instanceof NotFoundError) throw new NotFoundException();
-			throw new InternalServerErrorException(error);
-		}
-	}
-}
+export class UpdaterService extends BaseUpdaterService<StationEntity, UpdateStationDto> {}
