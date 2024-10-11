@@ -5,17 +5,8 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { NotFoundError } from '@mikro-orm/postgresql';
+import { BaseRemoverService } from '../../../shared/services/base-remover.service';
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
-export class RemoverService {
-  constructor(private readonly userRepository: UserRepository) {}
-
-  public async remove(id: number) {
-    try {
-      return await this.userRepository.softDelete(id);
-    } catch (error) {
-      if (error instanceof NotFoundError) throw new NotFoundException();
-      throw new InternalServerErrorException(error);
-    }
-  }
-}
+export class RemoverService extends BaseRemoverService<UserEntity> {}
