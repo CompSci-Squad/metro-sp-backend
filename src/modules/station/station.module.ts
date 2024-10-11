@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { StationController } from './station.controller';
 import { CreatorService } from './services/creator.service';
-import { StationRepository } from './repositories/station.repository';
 import { IndexerService } from './services/indexer.service';
 import { FinderService } from './services/finder.service';
 import { UpdaterService } from './services/updater.service';
@@ -19,5 +18,6 @@ import { StationEntity } from './entities/station.entity';
     UpdaterService,
     RemoverService,
   ],
+  exports: [FinderService]
 })
 export class StationModule {}

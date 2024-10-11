@@ -33,23 +33,5 @@ export class StationEntity extends BaseEntity {
 
 	@ManyToMany({ entity: () => UserEntity })
 	users = new Collection<UserEntity>(this);
-
-	constructor(
-		name: string,
-		latitude: number,
-		longitude: number,
-		address: string,
-		streetNumber: string,
-		openingTime: string,
-		closingTime: string
-	) {
-		super();
-		this.name = name;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.address = address;
-		this.streetNumber = streetNumber;
-		this.openingTime = openingTime;
-		this.closingTime = closingTime;
-	}
+	
 }
