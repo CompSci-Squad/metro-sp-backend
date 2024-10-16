@@ -43,6 +43,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsNotEmpty()
   @IsArray()
   @IsEnum(UserPermissions, { each: true })
   permissions?: UserPermissions[];
