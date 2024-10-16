@@ -9,7 +9,7 @@ import {
 import { BaseEntity } from '../../../shared/entities/base.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { StationRepository } from '../repositories/station.repository';
-import { EntranceEntity } from 'src/modules/entrance/entities/entrance.entity';
+import { EntranceEntity } from '../../entrance/entities/entrance.entity';
 
 @Entity({ repository: () => StationRepository, tableName: 'station' })
 export class StationEntity extends BaseEntity {

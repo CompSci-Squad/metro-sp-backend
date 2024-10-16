@@ -10,8 +10,8 @@ import {
 import { BaseEntity } from '../../../shared/entities/base.entity';
 import { EntranceRepository } from '../repositories/entrance.repository';
 import { EntranceStatus } from '../enums/entrance-status.enum';
-import { StationEntity } from 'src/modules/station/entities/station.entity';
-import { TerminalEntity } from 'src/modules/terminal/entities/terminal.entity';
+import { StationEntity } from '../../station/entities/station.entity';
+import { TerminalEntity } from '../../terminal/entities/terminal.entity';
 
 @Entity({ repository: () => EntranceRepository, tableName: 'entrance' })
 export class EntranceEntity extends BaseEntity {

@@ -10,7 +10,6 @@ import { MikroOrmMiddleware, MikroOrmModule } from '@mikro-orm/nestjs';
 import { EntranceEntity } from './entities/entrance.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([EntranceEntity])],
   controllers: [EntranceController],
   providers: [
     CreatorService,

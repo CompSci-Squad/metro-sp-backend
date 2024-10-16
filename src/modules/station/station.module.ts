@@ -10,7 +10,6 @@ import { MikroOrmMiddleware, MikroOrmModule } from '@mikro-orm/nestjs';
 import { StationEntity } from './entities/station.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([StationEntity])],
   controllers: [StationController],
   providers: [
     CreatorService,
