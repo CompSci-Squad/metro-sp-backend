@@ -1,21 +1,11 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { StationRepository } from '../repositories/station.repository';
-import { NotFoundError } from '@mikro-orm/postgresql';
+import { BaseFinderService } from '../../../shared/services/base-finder.service';
+import { StationEntity } from '../entities/station.entity';
 
 @Injectable()
-export class FinderService {
-  constructor(private readonly stationRepository: StationRepository) {}
-
-  public async findById(id: number) {
-    try {
-      return await this.stationRepository.findById(id);
-    } catch (error) {
-      if (error instanceof NotFoundError) throw new NotFoundException();
-      throw new InternalServerErrorException(error);
-    }
+export class FinderService extends BaseFinderService<StationEntity> {
+  constructor(private readonly stationRepository: StationRepository) {
+    super(stationRepository);
   }
 }

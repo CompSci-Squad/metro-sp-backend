@@ -18,5 +18,6 @@ import { StationEntity } from './entities/station.entity';
     UpdaterService,
     RemoverService,
   ],
+  exports: [FinderService],
 })
 export class StationModule {}

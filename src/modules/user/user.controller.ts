@@ -50,7 +50,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param() dto: FindOneParamsDto) {
+  public async remove(@Param() dto: FindOneParamsDto) {
     return this.removerService.remove(dto.id);
   }
 }

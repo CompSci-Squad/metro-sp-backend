@@ -31,4 +31,8 @@ export class CreateEntranceDto {
   @IsArray()
   @IsEnum(EntranceStatus, { each: true })
   status: EntranceStatus[];
+
+  @ApiProperty()
+  @IsNumber()
+  stationId: number;
 }

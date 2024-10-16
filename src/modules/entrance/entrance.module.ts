@@ -8,8 +8,10 @@ import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import { MikroOrmMiddleware, MikroOrmModule } from '@mikro-orm/nestjs';
 import { EntranceEntity } from './entities/entrance.entity';
+import { StationModule } from '../station/station.module';
 
 @Module({
+  imports: [StationModule],
   controllers: [EntranceController],
   providers: [
     CreatorService,
