@@ -9,5 +9,6 @@ import { BaseIndexerService } from '../../../shared/services/base-indexer.servic
 export class IndexerService extends BaseIndexerService<StationEntity> {
   constructor(private readonly stationRepository: StationRepository) {
     super(stationRepository);
+    console.log(this.stationRepository)
   }
 }

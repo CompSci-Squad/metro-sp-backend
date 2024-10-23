@@ -10,7 +10,6 @@ import { TerminalRepository } from './repositories/terminal.repository';
 @Module({
   controllers: [TerminalController],
   providers: [
-    TerminalRepository,
     CreatorService,
     IndexerService,
     FinderService,
