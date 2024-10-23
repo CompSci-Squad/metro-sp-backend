@@ -3,13 +3,12 @@ import { Collection, Entity, OneToOne, Property } from '@mikro-orm/postgresql';
 import { BaseEntity } from '../../../shared/entities/base.entity';
 
 import { TerminalRepository } from '../repositories/terminal.repository';
-import { EntranceEntity } from '../../entrance/entities/entrance.entity';
+import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 @Entity({ repository: () => TerminalRepository, tableName: 'terminal' })
 export class TerminalEntity extends BaseEntity {
   @Property()
+  @IsBoolean()
+  @IsNotEmpty()
   isActive!: boolean;
-
-  @OneToOne({ entity: () => EntranceEntity, mappedBy: 'terminals' })
-  entrances = new Collection<EntranceEntity>(this);
 }

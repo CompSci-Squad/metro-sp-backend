@@ -16,9 +16,13 @@ export abstract class BaseRepository<
   T extends BaseEntity,
 > extends EntityRepository<T> {
   async createEntity(info: Partial<T>): Promise<T> {
-    const entity = this.create(info as T);
-    await this.em.persistAndFlush(entity);
-    return entity;
+    try {
+      const entity = this.create(info as T);
+      await this.em.persistAndFlush(entity);
+      return entity;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findById(id: number): Promise<T | null> {

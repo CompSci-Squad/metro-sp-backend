@@ -13,6 +13,10 @@ import { EntranceStatus } from '../enums/entrance-status.enum';
 export class CreateEntranceDto {
   @ApiProperty()
   @IsNumber()
+  stationId: number;
+
+  @ApiProperty()
+  @IsNumber()
   @IsLatitude()
   latitude: number;
 
@@ -31,8 +35,4 @@ export class CreateEntranceDto {
   @IsArray()
   @IsEnum(EntranceStatus, { each: true })
   status: EntranceStatus[];
-
-  @ApiProperty()
-  @IsNumber()
-  stationId: number;
 }

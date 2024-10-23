@@ -2,8 +2,8 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Global, Module } from '@nestjs/common';
 import { UserEntity } from '../user/entities/user.entity';
 import { StationEntity } from '../station/entities/station.entity';
-import { TerminalEntity } from '../terminal/entities/terminal.entity';
 import { EntranceEntity } from '../entrance/entities/entrance.entity';
+import { TerminalEntity } from '../terminal/entities/terminal.entity';
 
 @Global()
 @Module({
@@ -11,8 +11,8 @@ import { EntranceEntity } from '../entrance/entities/entrance.entity';
     MikroOrmModule.forFeature([
       UserEntity,
       StationEntity,
-      TerminalEntity,
       EntranceEntity,
+      TerminalEntity,
     ]),
   ],
   exports: [MikroOrmModule],

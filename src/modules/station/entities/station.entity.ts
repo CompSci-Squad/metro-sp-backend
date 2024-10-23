@@ -9,7 +9,7 @@ import {
 import { BaseEntity } from '../../../shared/entities/base.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { StationRepository } from '../repositories/station.repository';
-import { EntranceEntity } from '../../entrance/entities/entrance.entity';
+import { EntranceEntity } from 'src/modules/entrance/entities/entrance.entity';
 
 @Entity({ repository: () => StationRepository, tableName: 'station' })
 export class StationEntity extends BaseEntity {
@@ -37,8 +37,8 @@ export class StationEntity extends BaseEntity {
   @ManyToMany({ entity: () => UserEntity })
   users = new Collection<UserEntity>(this);
 
-  @OneToMany({ entity: () => EntranceEntity, mappedBy: 'entrances' })
-  entrances = new Collection<EntranceEntity>(this);
+  //@OneToMany({ entity: () => EntranceEntity, mappedBy: 'station', orphanRemoval: true})
+  //entrance = new Collection<EntranceEntity>(this);
 
   constructor(
     name: string,
