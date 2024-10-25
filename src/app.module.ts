@@ -10,6 +10,7 @@ import { StationModule } from "./modules/station/station.module";
 import { ConfigModule } from "@nestjs/config";
 import { UserModule } from "./modules/user/user.module";
 import { GlobalModule } from "./modules/global/global.module";
+import { LogModule } from "./modules/log/log.module";
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { GlobalModule } from "./modules/global/global.module";
 		MikroOrmModule.forRoot(),
 		GlobalModule,
 		StationModule,
-		UserModule
+		UserModule,
+		LogModule
 	]
 })
 export class AppModule implements OnModuleInit, NestModule {

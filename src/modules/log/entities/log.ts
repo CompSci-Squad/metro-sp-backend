@@ -20,6 +20,4 @@ export class LogEntity {
 	@attribute({ type: "String" })
 	level?: LogLevel;
 
-	@attribute()
-	metadata?: Record<string, any>; // Optional metadata for additional details
 }

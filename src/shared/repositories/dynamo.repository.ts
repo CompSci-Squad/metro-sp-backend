@@ -3,7 +3,15 @@ import {
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+	AttributeDefinition,
+	CreateTableCommand,
+	DescribeTableCommand,
+	DynamoDBClient,
+	KeySchemaElement,
+	LocalSecondaryIndex,
+	ScanCommand,
+} from "@aws-sdk/client-dynamodb";
 import {
 	DynamoDBDocumentClient,
 	PutCommand,
@@ -20,110 +28,169 @@ type KeyType = {
 };
 
 export abstract class DynamoDBRepository<T, K extends KeyType> {
-	private readonly logger = new Logger(DynamoDBRepository.name);
+	protected abstract readonly logger: Logger;
 	protected abstract readonly tableName: string;
-	private readonly docClient: DynamoDBDocumentClient;
+	protected abstract readonly keyAttributes: KeySchemaElement[];
+	protected abstract readonly secondaryIndexes: LocalSecondaryIndex[];
+	protected abstract readonly attributes: AttributeDefinition[];
+	protected readonly docClient: DynamoDBDocumentClient;
+	protected readonly dbClient: DynamoDBClient;
 
-	constructor(configService: ConfigService) {
-		const client = new DynamoDBClient({
-			region: configService.get<string>("DYNAMODB_REGION") || "local",
-			endpoint:
-				configService.get<string>("DYNAMODB_ENDPOINT") ||
-				"http://localhost:8000",
-		});
-		this.docClient = DynamoDBDocumentClient.from(client);
+	private static readonly READ_CAPACITY_UNITS = 5;
+	private static readonly WRITE_CAPACITY_UNITS = 5;
+
+	constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {
+		this.dbClient = dbClient;
+		this.docClient = docClient;
 	}
 
-	protected async createItem(item: T): Promise<void> {
+	protected async ensureTableExists(): Promise<void> {
+		this.logger.log(this.tableName)
 		try {
-			const params = {
-				TableName: this.tableName,
-				Item: item,
-			};
-			await this.docClient.send(new PutCommand(params));
-		} catch (error) {
-			this.logger.error(error);
-			throw new InternalServerErrorException(
-				"Failed to create item",
-				error.message
+			await this.dbClient.send(
+				new DescribeTableCommand({ TableName: this.tableName })
 			);
+			this.logger.log(`Table ${this.tableName} already exists.`);
+		} catch (error) {
+			if (error.name === "ResourceNotFoundException") {
+				this.logger.warn(
+					`Table ${this.tableName} does not exist. Creating now...`
+				);
+				await this.createTable(
+					this.keyAttributes,
+					this.secondaryIndexes,
+					this.attributes
+				);
+			} else {
+				this.handleError(error, "check table existence");
+			}
 		}
 	}
 
-	protected async getItem(key: K): Promise<T | undefined> {
+	private async createTable(
+		keyAttributes: KeySchemaElement[],
+		secondaryIndexes: LocalSecondaryIndex[],
+		attributes: AttributeDefinition[]
+	): Promise<void> {
 		try {
-			const params = {
-				TableName: this.tableName,
-				Key: key,
-			};
-			const result = await this.docClient.send(new GetCommand(params));
-			return result.Item as T;
-		} catch (error) {
-			this.logger.error(error);
-			throw new InternalServerErrorException(
-				"Failed to fetch item",
-				error.message
+			await this.dbClient.send(
+				new CreateTableCommand({
+					TableName: this.tableName,
+					KeySchema: keyAttributes,
+					LocalSecondaryIndexes: secondaryIndexes,
+					AttributeDefinitions: attributes,
+					ProvisionedThroughput: {
+						ReadCapacityUnits: DynamoDBRepository.READ_CAPACITY_UNITS,
+						WriteCapacityUnits: DynamoDBRepository.WRITE_CAPACITY_UNITS,
+					},
+				})
 			);
+			this.logger.log(`Table ${this.tableName} created successfully.`);
+		} catch (createError) {
+			this.handleError(createError, "create table");
 		}
 	}
 
-	protected async updateItem(
+	private handleError(error: any, action: string): void {
+		this.logger.error(`Failed to ${action}: ${error.message}`);
+		throw new InternalServerErrorException(
+			`Failed to ${action}: ${error.message}`
+		);
+	}
+
+	public async createItem(item: T): Promise<void> {
+		const params = {
+			TableName: this.tableName,
+			Item: item,
+		};
+
+		await this.sendCommandWithErrorHandling(
+			new PutCommand(params),
+			"create item"
+		);
+	}
+
+	public async getItem(key: K): Promise<T | undefined> {
+		const params = {
+			TableName: this.tableName,
+			Key: key,
+		};
+
+		const result = await this.sendCommandWithErrorHandling(
+			new GetCommand(params),
+			"fetch item"
+		);
+		return result?.Item as T;
+	}
+
+	public async updateItem(
 		key: K,
 		updateExpression: string,
 		expressionValues: Record<string, any>
 	): Promise<void> {
-		try {
-			const params: UpdateCommandInput = {
-				TableName: this.tableName,
-				Key: key,
-				UpdateExpression: updateExpression,
-				ExpressionAttributeValues: expressionValues,
-				ReturnValues: "UPDATED_NEW",
-			};
-			await this.docClient.send(new UpdateCommand(params));
-		} catch (error) {
-			this.logger.error(error);
-			throw new InternalServerErrorException(
-				"Failed to update item",
-				error.message
-			);
-		}
+		const params: UpdateCommandInput = {
+			TableName: this.tableName,
+			Key: key,
+			UpdateExpression: updateExpression,
+			ExpressionAttributeValues: expressionValues,
+			ReturnValues: "UPDATED_NEW",
+		};
+
+		await this.sendCommandWithErrorHandling(
+			new UpdateCommand(params),
+			"update item"
+		);
 	}
 
-	protected async deleteItem(key: K): Promise<void> {
-		try {
-			const params = {
-				TableName: this.tableName,
-				Key: key,
-			};
-			await this.docClient.send(new DeleteCommand(params));
-		} catch (error) {
-			this.logger.error(error);
-			throw new InternalServerErrorException(
-				"Failed to delete item",
-				error.message
-			);
-		}
+	public async deleteItem(key: K): Promise<void> {
+		const params = {
+			TableName: this.tableName,
+			Key: key,
+		};
+
+		await this.sendCommandWithErrorHandling(
+			new DeleteCommand(params),
+			"delete item"
+		);
 	}
 
-	protected async queryItems(
-		keyConditionExpression: string,
-		expressionValues: Record<string, any>
+	public async queryItems(
+		keyConditionExpression?: string,
+		expressionValues?: Record<string, any>
 	): Promise<T[]> {
+		const params = {
+			TableName: this.tableName,
+			KeyConditionExpression: keyConditionExpression,
+			ExpressionAttributeValues: expressionValues,
+		};
+
+		const result = await this.sendCommandWithErrorHandling(
+			new QueryCommand(params),
+			"query items"
+		);
+		return result.Items as T[];
+	}
+
+	public async getAllItems(): Promise<T[]> {
+		const params = {
+			TableName: this.tableName,
+		};
+
+		const result = await this.sendCommandWithErrorHandling(
+			new ScanCommand(params),
+			"scan items"
+		);
+		return result.Items as T[];
+	}
+
+	private async sendCommandWithErrorHandling(
+		command: any,
+		action: string
+	): Promise<any> {
 		try {
-			const params = {
-				TableName: this.tableName,
-				KeyConditionExpression: keyConditionExpression,
-				ExpressionAttributeValues: expressionValues,
-			};
-			const result = await this.docClient.send(new QueryCommand(params));
-			return result.Items as T[];
+			return await this.docClient.send(command);
 		} catch (error) {
-			this.logger.error(error);
-			throw new InternalServerErrorException(
-				"Failed to query items",
-				error.message
-			);
+			this.handleError(error, action);
 		}
 	}
 }
