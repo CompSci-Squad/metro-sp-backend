@@ -24,6 +24,8 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.675.0",
     "@aws-sdk/lib-dynamodb": "^3.675.0",
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@mikro-orm/cli": "^6.3.13",
     "@mikro-orm/core": "^6.3.13",
     "@mikro-orm/entity-generator": "^6.3.13",

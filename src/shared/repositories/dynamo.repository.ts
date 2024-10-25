@@ -1,84 +1,129 @@
+import {
+	Injectable,
+	InternalServerErrorException,
+	Logger,
+} from "@nestjs/common";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, DeleteCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import {
+	DynamoDBDocumentClient,
+	PutCommand,
+	GetCommand,
+	UpdateCommand,
+	DeleteCommand,
+	QueryCommand,
+	UpdateCommandInput,
+} from "@aws-sdk/lib-dynamodb";
+import { ConfigService } from "@nestjs/config";
 
-class DynamoDBRepository {
-    private tableName: string;
-    private docClient: DynamoDBDocumentClient;
+type KeyType = {
+	id: string;
+};
 
-    constructor(tableName: string, endpoint: string = "http://localhost:8000") {
-        const client = new DynamoDBClient({
-            region: "local",
-            endpoint: endpoint // Points to local DynamoDB
-        });
-        this.docClient = DynamoDBDocumentClient.from(client);
-        this.tableName = tableName;
-    }
+export abstract class DynamoDBRepository<T, K extends KeyType> {
+	private readonly logger = new Logger(DynamoDBRepository.name);
+	protected abstract readonly tableName: string;
+	private readonly docClient: DynamoDBDocumentClient;
 
-    async createItem(item: Record<string, any>) {
-        const params = {
-            TableName: this.tableName,
-            Item: item,
-        };
-        return await this.docClient.send(new PutCommand(params));
-    }
+	constructor(configService: ConfigService) {
+		const client = new DynamoDBClient({
+			region: configService.get<string>("DYNAMODB_REGION") || "local",
+			endpoint:
+				configService.get<string>("DYNAMODB_ENDPOINT") ||
+				"http://localhost:8000",
+		});
+		this.docClient = DynamoDBDocumentClient.from(client);
+	}
 
-    async getItem(key: Record<string, any>) {
-        const params = {
-            TableName: this.tableName,
-            Key: key,
-        };
-        const result = await this.docClient.send(new GetCommand(params));
-        return result.Item;
-    }
+	protected async createItem(item: T): Promise<void> {
+		try {
+			const params = {
+				TableName: this.tableName,
+				Item: item,
+			};
+			await this.docClient.send(new PutCommand(params));
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(
+				"Failed to create item",
+				error.message
+			);
+		}
+	}
 
-    async updateItem(key: Record<string, any>, updateExpression: string, expressionValues: Record<string, any>) {
-        const params = {
-            TableName: this.tableName,
-            Key: key,
-            UpdateExpression: updateExpression,
-            ExpressionAttributeValues: expressionValues,
-            ReturnValues: "UPDATED_NEW",
-        };
-        return await this.docClient.send(new UpdateCommand(params));
-    }
+	protected async getItem(key: K): Promise<T | undefined> {
+		try {
+			const params = {
+				TableName: this.tableName,
+				Key: key,
+			};
+			const result = await this.docClient.send(new GetCommand(params));
+			return result.Item as T;
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(
+				"Failed to fetch item",
+				error.message
+			);
+		}
+	}
 
-    async deleteItem(key: Record<string, any>) {
-        const params = {
-            TableName: this.tableName,
-            Key: key,
-        };
-        return await this.docClient.send(new DeleteCommand(params));
-    }
+	protected async updateItem(
+		key: K,
+		updateExpression: string,
+		expressionValues: Record<string, any>
+	): Promise<void> {
+		try {
+			const params: UpdateCommandInput = {
+				TableName: this.tableName,
+				Key: key,
+				UpdateExpression: updateExpression,
+				ExpressionAttributeValues: expressionValues,
+				ReturnValues: "UPDATED_NEW",
+			};
+			await this.docClient.send(new UpdateCommand(params));
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(
+				"Failed to update item",
+				error.message
+			);
+		}
+	}
 
-    async queryItems(keyConditionExpression: string, expressionValues: Record<string, any>) {
-        const params = {
-            TableName: this.tableName,
-            KeyConditionExpression: keyConditionExpression,
-            ExpressionAttributeValues: expressionValues,
-        };
-        const result = await this.docClient.send(new QueryCommand(params));
-        return result.Items;
-    }
+	protected async deleteItem(key: K): Promise<void> {
+		try {
+			const params = {
+				TableName: this.tableName,
+				Key: key,
+			};
+			await this.docClient.send(new DeleteCommand(params));
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(
+				"Failed to delete item",
+				error.message
+			);
+		}
+	}
+
+	protected async queryItems(
+		keyConditionExpression: string,
+		expressionValues: Record<string, any>
+	): Promise<T[]> {
+		try {
+			const params = {
+				TableName: this.tableName,
+				KeyConditionExpression: keyConditionExpression,
+				ExpressionAttributeValues: expressionValues,
+			};
+			const result = await this.docClient.send(new QueryCommand(params));
+			return result.Items as T[];
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(
+				"Failed to query items",
+				error.message
+			);
+		}
+	}
 }
-
-// Usage Example
-(async () => {
-    const repo = new DynamoDBRepository('my_table', "http://localhost:8000");
-
-    // Add an item
-    await repo.createItem({ id: '123', name: 'Sample Item', category: 'test' });
-
-    // Fetch the item
-    const fetchedItem = await repo.getItem({ id: '123' });
-    console.log(fetchedItem);
-
-    // Update the item
-    await repo.updateItem(
-        { id: '123' },
-        "SET #nm = :name",
-        { ':name': 'Updated Name', '#nm': 'name' }
-    );
-
-    // Delete the item
-    await repo.deleteItem({ id: '123' });
-})();
