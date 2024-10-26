@@ -22,6 +22,7 @@ import {
 	UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
 import { ConfigService } from "@nestjs/config";
+import { DynamoDBTableManager } from "../database/dynamodb/table-manager";
 
 type KeyType = {
 	id: string;
@@ -29,75 +30,15 @@ type KeyType = {
 
 type DynamoDBItem = Record<string, { S: string }>;
 
-export abstract class DynamoDBRepository<T, K extends KeyType> {
-	protected abstract readonly logger: Logger;
-	protected abstract readonly tableName: string;
-	protected abstract readonly keyAttributes: KeySchemaElement[];
-	protected abstract readonly secondaryIndexes: LocalSecondaryIndex[];
-	protected abstract readonly attributes: AttributeDefinition[];
+export abstract class DynamoDBRepository<
+	T,
+	K extends KeyType,
+> extends DynamoDBTableManager {
 	protected readonly docClient: DynamoDBDocumentClient;
-	protected readonly dbClient: DynamoDBClient;
-
-	private static readonly READ_CAPACITY_UNITS = 5;
-	private static readonly WRITE_CAPACITY_UNITS = 5;
 
 	constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {
-		this.dbClient = dbClient;
+		super(dbClient);
 		this.docClient = docClient;
-	}
-
-	protected async ensureTableExists(): Promise<void> {
-		this.logger.log(this.tableName);
-		try {
-			await this.dbClient.send(
-				new DescribeTableCommand({ TableName: this.tableName })
-			);
-			this.logger.log(`Table ${this.tableName} already exists.`);
-		} catch (error) {
-			if (error.name === "ResourceNotFoundException") {
-				this.logger.warn(
-					`Table ${this.tableName} does not exist. Creating now...`
-				);
-				await this.createTable(
-					this.keyAttributes,
-					this.secondaryIndexes,
-					this.attributes
-				);
-			} else {
-				this.handleError(error, "check table existence");
-			}
-		}
-	}
-
-	private async createTable(
-		keyAttributes: KeySchemaElement[],
-		secondaryIndexes: LocalSecondaryIndex[],
-		attributes: AttributeDefinition[]
-	): Promise<void> {
-		try {
-			await this.dbClient.send(
-				new CreateTableCommand({
-					TableName: this.tableName,
-					KeySchema: keyAttributes,
-					LocalSecondaryIndexes: secondaryIndexes,
-					AttributeDefinitions: attributes,
-					ProvisionedThroughput: {
-						ReadCapacityUnits: DynamoDBRepository.READ_CAPACITY_UNITS,
-						WriteCapacityUnits: DynamoDBRepository.WRITE_CAPACITY_UNITS,
-					},
-				})
-			);
-			this.logger.log(`Table ${this.tableName} created successfully.`);
-		} catch (createError) {
-			this.handleError(createError, "create table");
-		}
-	}
-
-	private handleError(error: any, action: string): void {
-		this.logger.error(`Failed to ${action}: ${error.message}`);
-		throw new InternalServerErrorException(
-			`Failed to ${action}: ${error.message}`
-		);
 	}
 
 	public async createItem(item: T): Promise<void> {

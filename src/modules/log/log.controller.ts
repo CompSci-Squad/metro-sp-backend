@@ -22,15 +22,6 @@ export class LogController {
 		return await this.creatorService.create(logData);
 	}
 
-	//   @Get(':id')
-	//   async getLogById(@Param('id') id: string): Promise<Log> {
-	//     const log = await this.logService.findById(id);
-	//     if (!log) {
-	//       throw new NotFoundException(`Log with ID ${id} not found`);
-	//     }
-	//     return log;
-	//   }
-
 	@Get()
 	async getAllLogs(): Promise<LogEntity[]> {
 		return await this.indexerService.findAll();

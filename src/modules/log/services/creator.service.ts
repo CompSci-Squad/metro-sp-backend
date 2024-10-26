@@ -16,7 +16,6 @@ export class CreatorService {
 	constructor(private readonly logRepository: LogRepository) {}
 
 	public async create(data: CreateLogDto): Promise<void> {
-		console.log()
 		const log = new LogEntity();
 		log.id = ulid();
 		log.message = data.message;
