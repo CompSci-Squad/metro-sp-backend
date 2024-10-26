@@ -3,6 +3,8 @@ import {
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
+import { ulid } from 'ulid'
+import dayjs from 'dayjs'
 import { LogRepository } from "../repositories/log.repository"; // Import your LogRepository
 import { LogEntity } from "../entities/log";
 import { CreateLogDto } from "../dto/create-log.dto";
@@ -14,9 +16,11 @@ export class CreatorService {
 	constructor(private readonly logRepository: LogRepository) {}
 
 	public async create(data: CreateLogDto): Promise<void> {
+		console.log()
 		const log = new LogEntity();
+		log.id = ulid();
 		log.message = data.message;
-		log.timestamp = new Date();
+		log.timestamp = dayjs().toISOString()
 		log.level = data.level || LogLevel.INFO;
 
 		try {

@@ -2,44 +2,74 @@ import {
 	AttributeDefinition,
 	KeySchemaElement,
 	LocalSecondaryIndex,
+	KeyType,
 } from "@aws-sdk/client-dynamodb";
 
-export const logKeyAttributes: KeySchemaElement[] = [
-	{ AttributeName: "id", KeyType: "HASH" },
-	{ AttributeName: "timestamp", KeyType: "RANGE" },
+// Enum for attribute names and types to ensure consistent usage
+enum AttributeName {
+	ID = "id",
+	TIMESTAMP = "timestamp",
+	MESSAGE = "message",
+	LEVEL = "level",
+}
+
+enum AttributeType {
+	String = "S",
+	Number = "N",
+	Binary = "B",
+}
+
+// Helper function for creating a key schema
+const createKeySchema = (
+	hashKey: AttributeName,
+	rangeKey?: AttributeName
+): KeySchemaElement[] => [
+	{ AttributeName: hashKey, KeyType: "HASH" as KeyType },
+	...(rangeKey
+		? [{ AttributeName: rangeKey, KeyType: "RANGE" as KeyType }]
+		: []),
 ];
 
+// Helper function for creating a local secondary index
+const createSecondaryIndex = (
+	indexName: string,
+	hashKey: AttributeName,
+	rangeKey: AttributeName
+): LocalSecondaryIndex => ({
+	IndexName: indexName,
+	KeySchema: createKeySchema(hashKey, rangeKey),
+	Projection: { ProjectionType: "ALL" },
+});
+
+// Main table key schema definition
+export const logKeyAttributes: KeySchemaElement[] = createKeySchema(
+	AttributeName.ID,
+	AttributeName.TIMESTAMP
+);
+
+// Global secondary indexes
 export const logGlobalSecondaryIndexes: LocalSecondaryIndex[] = [
-	{
-		IndexName: "level-index",
-		KeySchema: [
-			{ AttributeName: "id", KeyType: "HASH" },
-			{ AttributeName: "level", KeyType: "RANGE" },
-		],
-		Projection: { ProjectionType: "ALL" },
-	},
-	{
-		IndexName: "message-index",
-		KeySchema: [
-			{ AttributeName: "id", KeyType: "HASH" },
-			{ AttributeName: "message", KeyType: "RANGE" },
-		],
-		Projection: { ProjectionType: "ALL" },
-	},
+	createSecondaryIndex("level-index", AttributeName.ID, AttributeName.LEVEL),
+	createSecondaryIndex(
+		"message-index",
+		AttributeName.ID,
+		AttributeName.MESSAGE
+	),
 ];
 
+// Helper function to create attribute definitions
+const createAttributeDefinition = (
+	name: AttributeName,
+	type: AttributeType
+): AttributeDefinition => ({
+	AttributeName: name,
+	AttributeType: type,
+});
+
+// Attribute definitions for main table and indexes
 export const logAttributes: AttributeDefinition[] = [
-	{ AttributeName: "id", AttributeType: "S" },
-	{
-		AttributeName: "message",
-		AttributeType: "S",
-	},
-	{
-		AttributeName: "timestamp",
-		AttributeType: "S",
-	},
-	{
-		AttributeName: "level",
-		AttributeType: "S",
-	},
+	createAttributeDefinition(AttributeName.ID, AttributeType.String),
+	createAttributeDefinition(AttributeName.MESSAGE, AttributeType.String),
+	createAttributeDefinition(AttributeName.TIMESTAMP, AttributeType.String),
+	createAttributeDefinition(AttributeName.LEVEL, AttributeType.String),
 ];
