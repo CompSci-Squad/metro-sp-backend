@@ -6,9 +6,9 @@ import {
 	Param,
 	NotFoundException,
 } from "@nestjs/common";
-import { LogEntity } from "./entities/log";
 import { CreateLogDto } from "./dto/create-log.dto";
 import { CreatorService, IndexerService } from "./services";
+import { LogEntity } from "./entities/log";
 
 @Controller("logs")
 export class LogController {
@@ -18,7 +18,7 @@ export class LogController {
 	) {}
 
 	@Post()
-	async createLog(@Body() logData: CreateLogDto): Promise<void> {
+	async createLog(@Body() logData: CreateLogDto): Promise<LogEntity> {
 		return await this.creatorService.create(logData);
 	}
 

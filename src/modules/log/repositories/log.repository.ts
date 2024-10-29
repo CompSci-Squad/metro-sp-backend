@@ -4,8 +4,6 @@ import {
 	Logger,
 } from "@nestjs/common";
 import { DynamoDBRepository } from "../../../shared/repositories/dynamo.repository"; // Path to your generic repository
-import { LogEntity } from "../entities/log";
-import { ConfigService } from "@nestjs/config";
 import {
 	logAttributes,
 	logGlobalSecondaryIndexes,
@@ -13,6 +11,7 @@ import {
 } from "../entities/log.attributes";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { LogEntity } from "../entities/log";
 
 export class LogRepository extends DynamoDBRepository<
 	LogEntity,

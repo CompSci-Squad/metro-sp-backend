@@ -23,6 +23,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { ConfigService } from "@nestjs/config";
 import { DynamoDBTableManager } from "../database/dynamodb/table-manager";
+import { BaseDynamoEntity } from "../entities/dynamo";
 
 type KeyType = {
 	id: string;
@@ -31,7 +32,7 @@ type KeyType = {
 type DynamoDBItem = Record<string, { S: string }>;
 
 export abstract class DynamoDBRepository<
-	T,
+	T extends BaseDynamoEntity,
 	K extends KeyType,
 > extends DynamoDBTableManager {
 	protected readonly docClient: DynamoDBDocumentClient;
@@ -41,7 +42,7 @@ export abstract class DynamoDBRepository<
 		this.docClient = docClient;
 	}
 
-	public async createItem(item: T): Promise<void> {
+	public async createItem(item: T): Promise<T> {
 		const params = {
 			TableName: this.tableName,
 			Item: item,
@@ -51,9 +52,12 @@ export abstract class DynamoDBRepository<
 			new PutCommand(params),
 			"create item"
 		);
+
+		return this.getItemById(item.id);
 	}
 
 	public async getItem(key: K): Promise<T | undefined> {
+		
 		const params = {
 			TableName: this.tableName,
 			Key: key,
@@ -64,6 +68,24 @@ export abstract class DynamoDBRepository<
 			"fetch item"
 		);
 		return result?.Item as T;
+	}
+
+	public async getItemById(id: string): Promise<T> {
+		const params = {
+			TableName: this.tableName,
+			KeyConditionExpression: 'id = :id',
+			ExpressionAttributeValues: {
+				':id': id,
+			},
+			Limit: 1,
+		};
+	
+		const result = await this.sendCommandWithErrorHandling(
+			new QueryCommand(params),
+			"fetch items"
+		);
+	
+		return result?.Items as T;  // return an array of items
 	}
 
 	public async updateItem(
