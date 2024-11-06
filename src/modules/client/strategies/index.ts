@@ -1,4 +1,3 @@
-export { ClientCreatorAgeStrategy } from './client-creator-age.strategy';
-export { ClientCreatorPCDStrategy } from './client-creator-pcd.strategy';
-export { ClientCreatorPoliceOfficerStrategy } from './client-creator-police-officer.strategy';
-export { ClientCreatorUnemployedStrategy } from './cliente-creator-unemployed.strategy';
+export { ClientValidatorAgeStrategy } from './client-validator-age.strategy';
+export { ClientValidatorPoliceOfficerStrategy } from './client-validator-police-officer.strategy';
+export { ClientValidatorUnemployedStrategy } from './cliente-validator-unemployed.strategy';

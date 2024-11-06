@@ -11,7 +11,7 @@ import {
 import { DynamoDBTableManager } from '../database/dynamodb/table-manager';
 import { BaseDynamoEntity } from '../entities/dynamo';
 
-type KeyType = {
+export type KeyType = {
   id: string;
 };
 
@@ -103,6 +103,20 @@ export abstract class DynamoDBRepository<
       'delete item',
     );
   }
+
+  public async deleteItemById(id: string): Promise<void> {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        id: id
+      },
+    };
+
+    await this.sendCommandWithErrorHandling(
+      new DeleteCommand(params),
+      'delete item by id',
+    );
+}
 
   public async queryItems(
     keyConditionExpression?: string,

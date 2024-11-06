@@ -9,17 +9,24 @@ export class ClientEntity extends BaseDynamoEntity {
   justificationType: JustificationType;
   justificationDetails: string;
 
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 
-  constructor(
-    id: string,
-    image: string,
-    cpf: string,
-    name: string,
-    justificationType: JustificationType,
-    justificationDetails: string,
-  ) {
+  constructor({
+    id,
+    image,
+    cpf,
+    name,
+    justificationType,
+    justificationDetails
+  }: {
+    id: string;
+    image: string;
+    cpf: string;
+    name: string;
+    justificationType: JustificationType;
+    justificationDetails: string;
+  }) {
     super(id);
     this.image = image;
     this.cpf = cpf;

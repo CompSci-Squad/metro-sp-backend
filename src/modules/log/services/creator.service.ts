@@ -7,7 +7,6 @@ import { ulid } from "ulid";
 import dayjs from "dayjs";
 import { LogRepository } from "../repositories/log.repository";
 import { CreateLogDto } from "../dto/create-log.dto";
-import { LogLevel } from "../enums/log-level.enum";
 import { LogEntity } from "../entities/log";
 
 @Injectable()
