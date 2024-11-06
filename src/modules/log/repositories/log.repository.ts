@@ -9,7 +9,7 @@ import {
 	logGlobalSecondaryIndexes,
 	logKeyAttributes,
 } from "../entities/log.attributes";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GlobalSecondaryIndex } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { LogEntity } from "../entities/log";
 
@@ -21,6 +21,7 @@ export class LogRepository extends DynamoDBRepository<
 	protected tableName = "logs";
 	protected keyAttributes = logKeyAttributes;
 	protected secondaryIndexes = logGlobalSecondaryIndexes;
+	protected globalSecondaryIndexes = [];
 	protected attributes = logAttributes;
 
 	constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {

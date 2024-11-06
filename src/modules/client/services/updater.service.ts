@@ -9,5 +9,5 @@ export class UpdaterService {
         private readonly clientRepository: ClientRepository
     ){}
 
-    
+    public async update(){}
 }

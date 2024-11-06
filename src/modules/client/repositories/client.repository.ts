@@ -8,6 +8,7 @@ import {
   clientAttributes,
   clientKeyAttributes,
   clientGlobalSecondaryIndexes,
+  clientLocalSecondaryIndexes,
 } from '../entities/client.attributes';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
@@ -20,7 +21,9 @@ export class ClientRepository extends DynamoDBRepository<
   protected readonly logger = new Logger(ClientRepository.name);
   protected tableName = 'clients';
   protected keyAttributes = clientKeyAttributes;
-  protected secondaryIndexes = clientGlobalSecondaryIndexes;
+
+  protected secondaryIndexes = clientLocalSecondaryIndexes;
+  protected globalSecondaryIndexes = clientGlobalSecondaryIndexes;
   protected attributes = clientAttributes;
 
   constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {

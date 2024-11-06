@@ -92,6 +92,26 @@ export abstract class DynamoDBRepository<
     );
   }
 
+  public async updateItemById(
+    id: string,
+    updateExpression: string,
+    expressionValues: Record<string, any>
+): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: this.tableName,
+      Key: { id: id },
+      UpdateExpression: updateExpression,
+      ExpressionAttributeValues: expressionValues,
+      ReturnValues: 'UPDATED_NEW',
+    };
+
+    await this.sendCommandWithErrorHandling(
+      new UpdateCommand(params),
+      'update item by id',
+    );
+}
+
+
   public async deleteItem(key: K): Promise<void> {
     const params = {
       TableName: this.tableName,

@@ -5,6 +5,7 @@ import {
     KeySchemaElement,
     LocalSecondaryIndex,
     AttributeDefinition,
+    GlobalSecondaryIndex,
 } from "@aws-sdk/client-dynamodb";
 import { InternalServerErrorException, Logger } from "@nestjs/common";
 
@@ -12,6 +13,7 @@ export abstract class DynamoDBTableManager {
     protected abstract readonly tableName: string;
 	protected abstract readonly keyAttributes: KeySchemaElement[];
 	protected abstract readonly secondaryIndexes: LocalSecondaryIndex[];
+    protected abstract readonly globalSecondaryIndexes?: GlobalSecondaryIndex[]
 	protected abstract readonly attributes: AttributeDefinition[];
     protected abstract readonly logger: Logger;
     private static readonly READ_CAPACITY_UNITS = 5;
@@ -45,6 +47,7 @@ export abstract class DynamoDBTableManager {
                     TableName: this.tableName,
                     KeySchema: this.keyAttributes,
                     LocalSecondaryIndexes: this.secondaryIndexes,
+                    GlobalSecondaryIndexes: this.globalSecondaryIndexes,
                     AttributeDefinitions: this.attributes,
                     ProvisionedThroughput: {
                         ReadCapacityUnits: DynamoDBTableManager.READ_CAPACITY_UNITS,
