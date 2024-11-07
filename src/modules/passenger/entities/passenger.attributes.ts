@@ -47,7 +47,7 @@ const createGlobalSecondaryIndex = (
 	ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 },
 });
 
-export const clientGlobalSecondaryIndexes: GlobalSecondaryIndex[] = [
+export const passengerGlobalSecondaryIndexes: GlobalSecondaryIndex[] = [
 	createGlobalSecondaryIndex(
 		"name-index",
 		AttributeName.ID,
@@ -67,13 +67,13 @@ const createSecondaryIndex = (
 });
 
 // Main table key schema definition
-export const clientKeyAttributes: KeySchemaElement[] = createKeySchema(
+export const passengerKeyAttributes: KeySchemaElement[] = createKeySchema(
 	AttributeName.ID,
 	AttributeName.CPF
 );
 
 // Global secondary indexes
-export const clientLocalSecondaryIndexes: LocalSecondaryIndex[] = [
+export const passengerLocalSecondaryIndexes: LocalSecondaryIndex[] = [
 	createSecondaryIndex(
 		"createdAt-index",
 		AttributeName.ID,
@@ -107,7 +107,7 @@ const createAttributeDefinition = (
 });
 
 // Attribute definitions for main table and indexes
-export const clientAttributes: AttributeDefinition[] = [
+export const passengerAttributes: AttributeDefinition[] = [
 	createAttributeDefinition(AttributeName.ID, AttributeType.String),
 	createAttributeDefinition(AttributeName.NAME, AttributeType.String),
 	createAttributeDefinition(AttributeName.CREATEDAT, AttributeType.String),

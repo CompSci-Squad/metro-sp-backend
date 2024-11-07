@@ -1,14 +1,14 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { ConfigService } from '@nestjs/config';
-import { ClientRepository } from '../repositories/client.repository';
+import { PassengerRepository } from '../repositories/passenger.repository';
 
-export class ClientRepositorySingleton {
-  private static instance: ClientRepository;
+export class PassengerRepositorySingleton {
+  private static instance: PassengerRepository;
 
   private constructor() {}
 
-  public static getInstance(configService: ConfigService): ClientRepository {
+  public static getInstance(configService: ConfigService): PassengerRepository {
     if (!this.instance) {
       this.instance = this.createClientRepositoryFactory(configService);
     }
@@ -17,7 +17,7 @@ export class ClientRepositorySingleton {
 
   private static createClientRepositoryFactory(
     configService: ConfigService,
-  ): ClientRepository {
+  ): PassengerRepository {
     const dbClient = new DynamoDBClient({
       region: configService.get<string>('DYNAMODB_REGION') || 'local',
       endpoint:
@@ -31,6 +31,6 @@ export class ClientRepositorySingleton {
     });
 
     const docClient = DynamoDBDocumentClient.from(dbClient);
-    return new ClientRepository(dbClient, docClient);
+    return new PassengerRepository(dbClient, docClient);
   }
 }

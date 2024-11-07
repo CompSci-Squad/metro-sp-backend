@@ -3,28 +3,28 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { DynamoDBRepository } from '../../../shared/repositories/dynamo.repository'; // Path to your generic repository
+import { DynamoDBRepository } from '../../../shared/repositories/dynamo.repository';
 import {
-  clientAttributes,
-  clientKeyAttributes,
-  clientGlobalSecondaryIndexes,
-  clientLocalSecondaryIndexes,
-} from '../entities/client.attributes';
+  passengerAttributes,
+  passengerKeyAttributes,
+  passengerGlobalSecondaryIndexes,
+  passengerLocalSecondaryIndexes,
+} from '../entities/passenger.attributes';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { ClientEntity } from '../entities/client';
 
-export class ClientRepository extends DynamoDBRepository<
+export class PassengerRepository extends DynamoDBRepository<
   ClientEntity,
   { id: string; cpf: string }
 > {
-  protected readonly logger = new Logger(ClientRepository.name);
+  protected readonly logger = new Logger(PassengerRepository.name);
   protected tableName = 'clients';
-  protected keyAttributes = clientKeyAttributes;
+  protected keyAttributes = passengerKeyAttributes;
 
-  protected secondaryIndexes = clientLocalSecondaryIndexes;
-  protected globalSecondaryIndexes = clientGlobalSecondaryIndexes;
-  protected attributes = clientAttributes;
+  protected secondaryIndexes = passengerLocalSecondaryIndexes;
+  protected globalSecondaryIndexes = passengerGlobalSecondaryIndexes;
+  protected attributes = passengerAttributes;
 
   constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {
     super(dbClient, docClient);

@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { GlobalModule } from './modules/global/global.module';
 import { LogModule } from './modules/log/log.module';
-import { ClientModule } from './modules/client/client.module';
+import { PassengerModule } from './modules/passenger/passenger.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { ClientModule } from './modules/client/client.module';
     StationModule,
     UserModule,
     LogModule,
-    ClientModule,
+    PassengerModule,
   ],
 })
 export class AppModule implements OnModuleInit, NestModule {

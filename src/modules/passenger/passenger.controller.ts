@@ -7,10 +7,10 @@ import {
 	Param,
 	Delete,
 } from "@nestjs/common";
-import { CreateClientDto } from "./dto/create-client.dto";
+import { CreateClientDto } from "./dto/create-passenger.dto";
 import { UpdateClientDto } from "./dto/update-client.dto";
 import {
-	ClientCreatorContextService,
+	PassengerCreatorContextService,
 	FinderService,
 	IndexerService,
 	RemoverService,
@@ -19,9 +19,9 @@ import {
 import { FindOneParamsDto } from "./dto/find-one-params.dto";
 
 @Controller("client")
-export class ClientController {
+export class PassengerController {
 	constructor(
-		private readonly creatorService: ClientCreatorContextService,
+		private readonly creatorService: PassengerCreatorContextService,
 		private readonly finderService: FinderService,
 		private readonly indexerService: IndexerService,
 		private readonly removerService: RemoverService,

@@ -3,7 +3,7 @@ import {
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
-import { ClientRepository } from "../repositories/client.repository";
+import { ClientRepository } from "../repositories/passenger.repository";
 import { DynamoBaseRemoverService } from "../../../shared/services/dynamodb/dynamo-base-remover.service";
 import { ClientEntity } from "../entities/client";
 

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { ClientRepository } from "../repositories/client.repository";
+import { ClientRepository } from "../repositories/passenger.repository";
 
 @Injectable()
 export class UpdaterService {

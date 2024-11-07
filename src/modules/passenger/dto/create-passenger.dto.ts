@@ -3,7 +3,7 @@ import { IsBase64, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { IsCpfValid } from '../../../shared/decorators/cpf-validator';
 import { JustificationType } from '../enums/justification-type.enum';
 
-export class CreateClientDto {
+export class CreatePassengerDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

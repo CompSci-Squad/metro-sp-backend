@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClientStrategy } from '../interfaces/create-client.interface';
+import { ValidatePassengerStrategy } from '../interfaces/validate-passenger.interface';
 
 @Injectable()
-export class ClientValidatorUnemployedStrategy implements CreateClientStrategy {
+export class PassengerValidatorUnemployedStrategy implements ValidatePassengerStrategy {
   constructor() {}
   public async validate(justificationDetails: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
