@@ -4,9 +4,9 @@ import {
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
-import { CreateClientDto } from "../dto/create-passenger.dto";
+import { CreatePassengerDto } from "../dto/create-passenger.dto";
 import { ValidatePassengerStrategy } from "../interfaces/validate-passenger.interface";
-import { ClientEntity } from "../entities/client";
+import { PassengerEntity } from "../entities/passenger";
 import { JustificationType } from "../enums/justification-type.enum";
 import {
 	PassengerValidatorAgeStrategy,
@@ -39,7 +39,7 @@ export class PassengerCreatorContextService {
 		this.strategy = strategy;
 	}
 
-	public async create(data: CreateClientDto): Promise<ClientEntity> {
+	public async create(data: CreatePassengerDto): Promise<PassengerEntity> {
 		try {
 			const strategy = this.strategyMap[data.justificationType];
 
@@ -53,7 +53,7 @@ export class PassengerCreatorContextService {
 				throw new BadRequestException("Invalid justification details");
 			}
 			return await this.clientRepository.createItem(
-				new ClientEntity({ ...data, id: ulid() })
+				new PassengerEntity({ ...data, id: ulid() })
 			);
 		} catch (error) {
 			this.logger.error(error);

@@ -2,12 +2,12 @@ import {
 	Injectable,
 	Logger,
 } from "@nestjs/common";
-import { ClientEntity } from "../entities/client";
+import { PassengerEntity } from "../entities/passenger";
 import { DynamoBaseFinderService } from "../../../shared/services/dynamodb/dynamo-base-finder.service";
 
 @Injectable()
 export class FinderService extends DynamoBaseFinderService<
-	ClientEntity,
+	PassengerEntity,
 	{ id: string; cpf: string }
 > {
 	protected readonly logger = new Logger(FinderService.name);

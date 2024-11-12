@@ -7,8 +7,8 @@ import {
 	Param,
 	Delete,
 } from "@nestjs/common";
-import { CreateClientDto } from "./dto/create-passenger.dto";
-import { UpdateClientDto } from "./dto/update-client.dto";
+import { CreatePassengerDto } from "./dto/create-passenger.dto";
+import { UpdatePassengerDto } from "./dto/update-passenger.dto";
 import {
 	PassengerCreatorContextService,
 	FinderService,
@@ -29,8 +29,8 @@ export class PassengerController {
 	) {}
 
 	@Post()
-	async create(@Body() createClientDto: CreateClientDto) {
-		return this.creatorService.create(createClientDto);
+	async create(@Body() createPassengerDto: CreatePassengerDto) {
+		return this.creatorService.create(createPassengerDto);
 	}
 
 	@Get()
@@ -43,13 +43,13 @@ export class PassengerController {
 		return this.finderService.findById(id);
 	}
 
-	// @Patch(":id")
-	// async update(
-	// 	@Param("id") id: string,
-	// 	@Body() updateClientDto: UpdateClientDto
-	// ) {
-	// 	return this.clientService.update(+id, updateClientDto);
-	// }
+	@Patch(":id")
+	async update(
+		@Param("id") id: string,
+		@Body() updatePassengerDto: UpdatePassengerDto
+	) {
+		return this.updaterService.update(id, updatePassengerDto);
+	}
 
 	@Delete(":id")
 	async remove(@Param() { id }: FindOneParamsDto) {

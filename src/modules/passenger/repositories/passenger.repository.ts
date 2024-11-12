@@ -12,10 +12,10 @@ import {
 } from '../entities/passenger.attributes';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { ClientEntity } from '../entities/client';
+import { PassengerEntity } from '../entities/passenger';
 
 export class PassengerRepository extends DynamoDBRepository<
-  ClientEntity,
+  PassengerEntity,
   { id: string; cpf: string }
 > {
   protected readonly logger = new Logger(PassengerRepository.name);

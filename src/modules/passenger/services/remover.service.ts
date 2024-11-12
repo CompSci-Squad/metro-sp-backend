@@ -1,15 +1,13 @@
 import {
 	Injectable,
-	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
-import { ClientRepository } from "../repositories/passenger.repository";
 import { DynamoBaseRemoverService } from "../../../shared/services/dynamodb/dynamo-base-remover.service";
-import { ClientEntity } from "../entities/client";
+import { PassengerEntity } from "../entities/passenger";
 
 @Injectable()
 export class RemoverService extends DynamoBaseRemoverService<
-	ClientEntity,
+	PassengerEntity,
 	{ id: string; cpf: string }
 > {
 	protected readonly logger = new Logger(RemoverService.name);

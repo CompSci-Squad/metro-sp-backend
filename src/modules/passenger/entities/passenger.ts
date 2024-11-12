@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { BaseDynamoEntity } from '../../../shared/entities/dynamo';
 import { JustificationType } from '../enums/justification-type.enum';
 
-export class ClientEntity extends BaseDynamoEntity {
+export class PassengerEntity extends BaseDynamoEntity {
   image: string;
   cpf: string;
   name: string;
