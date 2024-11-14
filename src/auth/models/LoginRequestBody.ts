@@ -1,8 +1,8 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class LoginRequestBody {
-  @IsNumber()
-  id: number;
+  @IsEmail()
+  email: string;
 
   @IsString()
   password: string;
