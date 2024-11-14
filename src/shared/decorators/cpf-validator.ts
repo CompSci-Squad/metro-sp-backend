@@ -39,7 +39,7 @@ export class IsCpfValidConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return 'CPF is not valid';
+    return 'CPF não é valido';
   }
 }
 

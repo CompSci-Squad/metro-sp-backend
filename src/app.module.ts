@@ -12,6 +12,10 @@ import { UserModule } from './modules/user/user.module';
 import { GlobalModule } from './modules/global/global.module';
 import { EntranceModule } from './modules/entrance/entrance.module';
 import { TerminalModule } from './modules/terminal/terminal.module';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -22,6 +26,14 @@ import { TerminalModule } from './modules/terminal/terminal.module';
     UserModule,
     EntranceModule,
     TerminalModule,
+    AuthModule,
+    JwtModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule implements OnModuleInit, NestModule {

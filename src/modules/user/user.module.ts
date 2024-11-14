@@ -15,5 +15,6 @@ import { RemoverService } from './services/remover.service';
     UpdaterService,
     RemoverService,
   ],
+  exports: [FinderService],
 })
 export class UserModule {}

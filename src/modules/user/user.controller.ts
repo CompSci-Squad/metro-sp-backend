@@ -15,6 +15,7 @@ import { FindOneParamsDto } from './dto/find-one-params.dto';
 import { IndexerService } from './services/indexer.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -28,7 +29,17 @@ export class UserController {
 
   @Post()
   public async create(@Body() createUserDto: CreateUserDto) {
-    return this.creatorService.create(createUserDto);
+    const data = {
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
+    };
+
+    const createdUser = await this.creatorService.create(data);
+
+    return {
+      ...createdUser,
+      password: undefined,
+    };
   }
 
   @Get()
