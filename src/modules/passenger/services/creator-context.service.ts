@@ -32,6 +32,7 @@ export class PassengerCreatorContextService {
 			[JustificationType.AGE]: this.ageStrategy,
 			[JustificationType.UNEMPLOYED]: this.unemployedStrategy,
 			[JustificationType.POLICEOFFICER]: this.policeOfficerStrategy,
+			[JustificationType.PCD]: null,
 		};
 	}
 
@@ -43,13 +44,13 @@ export class PassengerCreatorContextService {
 		try {
 			const strategy = this.strategyMap[data.justificationType];
 
-			if (!strategy) {
+			if (!strategy && strategy !== null) {
 				throw new BadRequestException("Invalid justification type");
 			}
 
 			this.setStrategy(strategy);
 
-			if (!(await this.strategy.validate(data.justificationDetails))) {
+			if (this.strategy !== null && !(await this.strategy.validate(data.justificationDetails))) {
 				throw new BadRequestException("Invalid justification details");
 			}
 			return await this.clientRepository.createItem(

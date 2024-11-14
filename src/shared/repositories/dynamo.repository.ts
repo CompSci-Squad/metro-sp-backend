@@ -70,19 +70,21 @@ export abstract class DynamoDBRepository<
       'fetch items',
     );
 
-    return result?.Items as T; // return an array of items
+    return result?.Items?.[0] as T; // return an array of items
   }
 
   public async updateItem(
     key: K,
     updateExpression: string,
     expressionValues: Record<string, any>,
-  ): Promise<void> {
+    expressionAttributeNames: Record<string, string>,
+  ): Promise<T> {
     const params: UpdateCommandInput = {
       TableName: this.tableName,
       Key: key,
       UpdateExpression: updateExpression,
       ExpressionAttributeValues: expressionValues,
+      ExpressionAttributeNames: expressionAttributeNames,
       ReturnValues: 'UPDATED_NEW',
     };
 
@@ -90,6 +92,8 @@ export abstract class DynamoDBRepository<
       new UpdateCommand(params),
       'update item',
     );
+
+    return await this.getItem(key)
   }
 
   public async updateItemById(

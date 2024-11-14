@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	HttpCode,
 } from "@nestjs/common";
 import { CreatePassengerDto } from "./dto/create-passenger.dto";
 import { UpdatePassengerDto } from "./dto/update-passenger.dto";
@@ -18,7 +19,7 @@ import {
 } from "./services";
 import { FindOneParamsDto } from "./dto/find-one-params.dto";
 
-@Controller("client")
+@Controller("passenger")
 export class PassengerController {
 	constructor(
 		private readonly creatorService: PassengerCreatorContextService,
@@ -51,8 +52,9 @@ export class PassengerController {
 		return this.updaterService.update(id, updatePassengerDto);
 	}
 
+	@HttpCode(204)
 	@Delete(":id")
 	async remove(@Param() { id }: FindOneParamsDto) {
-		return this.removerService.removeById(id);
+		return this.removerService.remove(id);
 	}
 }
