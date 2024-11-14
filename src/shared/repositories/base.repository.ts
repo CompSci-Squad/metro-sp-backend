@@ -30,6 +30,11 @@ export abstract class BaseRepository<
     return this.findOneOrFail(query);
   }
 
+  async findByEmail(email: string): Promise<T | null> {
+    const query: FilterQuery<T> = { email } as FilterQuery<T>;
+    return this.findOneOrFail(query);
+  }
+
   async update(id: number, data: EntityData<T>): Promise<T> {
     const entity = await this.findById(id);
     if (!entity) {
@@ -40,8 +45,27 @@ export abstract class BaseRepository<
     return entity;
   }
 
+  async updateByEmail(email: string, data: EntityData<T>): Promise<T> {
+    const entity = await this.findByEmail(email);
+    if (!entity) {
+      throw new Error('Entity not found');
+    }
+    this.assign(entity, data as any);
+    await this.em.persistAndFlush(entity);
+    return entity;
+  }
+
   async softDelete(id: number): Promise<void> {
     const entity = await this.findById(id);
+    if (!entity) {
+      throw new Error('Entity not found');
+    }
+    entity['deletedAt'] = new Date();
+    await this.em.flush();
+  }
+
+  async softDeleteByEmail(email: string): Promise<void> {
+    const entity = await this.findByEmail(email);
     if (!entity) {
       throw new Error('Entity not found');
     }

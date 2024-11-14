@@ -19,4 +19,13 @@ export class UpdaterService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  public async updateByEmail(email: string, dto: UpdateUserDto) {
+    try {
+      return await this.userRepository.updateByEmail(email, dto);
+    } catch (error) {
+      if (error instanceof NotFoundError) throw new NotFoundException();
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

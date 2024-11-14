@@ -20,4 +20,13 @@ export abstract class BaseFinderService<T extends BaseEntity> {
       throw new InternalServerErrorException(error);
     }
   }
+
+  public async findByEmail(email: string) {
+    try {
+      return await this.baseRepository.findByEmail(email);
+    } catch (error) {
+      if (error instanceof NotFoundError) throw new NotFoundException();
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

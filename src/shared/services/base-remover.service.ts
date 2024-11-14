@@ -21,4 +21,13 @@ export abstract class BaseRemoverService<T extends BaseEntity> {
       throw new InternalServerErrorException(error);
     }
   }
+
+  public async removeByEmail(email: string) {
+    try {
+      return await this.baseRepository.softDeleteByEmail(email);
+    } catch (error) {
+      if (error instanceof NotFoundError) throw new NotFoundException();
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

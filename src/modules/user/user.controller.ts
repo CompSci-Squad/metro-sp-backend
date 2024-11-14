@@ -47,21 +47,21 @@ export class UserController {
     return this.indexerService.index();
   }
 
-  @Get(':id')
+  @Get(':email')
   public async findOne(@Param() dto: FindOneParamsDto) {
-    return this.finderService.findById(dto.id);
+    return this.finderService.findByEmail(dto.email);
   }
 
-  @Patch(':id')
+  @Patch(':email')
   public async update(
     @Param() dto: FindOneParamsDto,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.updaterService.update(dto.id, updateUserDto);
+    return this.updaterService.updateByEmail(dto.email, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete(':email')
   public async remove(@Param() dto: FindOneParamsDto) {
-    return this.removerService.remove(dto.id);
+    return this.removerService.removeByEmail(dto.email);
   }
 }
