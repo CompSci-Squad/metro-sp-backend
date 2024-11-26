@@ -32,6 +32,7 @@ export class UserController {
     const data = {
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
+      cpf: await bcrypt.hash(createUserDto.cpf, 10),
     };
 
     const createdUser = await this.creatorService.create(data);
@@ -39,6 +40,7 @@ export class UserController {
     return {
       ...createdUser,
       password: undefined,
+      cpf: undefined,
     };
   }
 
