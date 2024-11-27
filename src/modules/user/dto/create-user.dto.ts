@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -38,4 +39,8 @@ export class CreateUserDto {
   @IsArray()
   @IsEnum(UserPermissions, { each: true })
   permissions: UserPermissions[];
+
+  @ApiProperty()
+  @IsNumber()
+  stationId: number
 }

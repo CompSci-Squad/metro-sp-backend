@@ -16,6 +16,8 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { LogModule } from './modules/log/log.module';
+import { PassengerModule } from './modules/passenger/passenger.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     TerminalModule,
     AuthModule,
     JwtModule,
+    LogModule,
+    PassengerModule,
   ],
   providers: [
     {

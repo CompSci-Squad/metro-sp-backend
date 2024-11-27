@@ -6,6 +6,7 @@ import {
   EntityRepository,
   FilterQuery,
   FindAllOptions,
+  FindOptions,
   FromEntityType,
   RequiredEntityData,
   wrap,
@@ -63,7 +64,7 @@ export abstract class BaseRepository<
     entity['deletedAt'] = new Date();
     await this.em.flush();
   }
-
+  
   async softDeleteByEmail(email: string): Promise<void> {
     const entity = await this.findByEmail(email);
     if (!entity) {

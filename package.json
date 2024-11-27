@@ -22,6 +22,10 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.675.0",
+    "@aws-sdk/lib-dynamodb": "^3.675.0",
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@mikro-orm/cli": "^6.3.13",
     "@mikro-orm/core": "^6.3.13",
     "@mikro-orm/entity-generator": "^6.3.13",
@@ -44,13 +48,15 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "compression": "^1.7.4",
+    "dayjs": "^1.11.13",
     "helmet": "^8.0.0",
     "nocache": "^4.0.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.3",
