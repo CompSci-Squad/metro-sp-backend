@@ -6,17 +6,16 @@ import { LogRepositorySingleton } from './factories/create-log-repository.factor
 import { LogRepository } from './repositories/log.repository';
 
 @Module({
-    imports: [ConfigModule],
-  controllers: [
-    LogController
-  ],
+  imports: [ConfigModule],
+  controllers: [LogController],
   providers: [
     CreatorService,
     IndexerService,
     {
-        provide: LogRepository,
-        useFactory: (configService: ConfigService) => LogRepositorySingleton.getInstance(configService),
-        inject: [ConfigService],
+      provide: LogRepository,
+      useFactory: (configService: ConfigService) =>
+        LogRepositorySingleton.getInstance(configService),
+      inject: [ConfigService],
     },
   ],
 })
