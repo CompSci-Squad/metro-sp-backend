@@ -15,7 +15,7 @@ import {
 	RemoverService,
 	UpdaterService,
 } from "./services";
-import { EncryptionUtil } from "./utils";
+import { CryptographyUtils } from "../../shared/utils/cryptography.utils";
 
 @Module({
 	controllers: [PassengerController],
@@ -35,7 +35,7 @@ import { EncryptionUtil } from "./utils";
 		UpdaterService,
 		RemoverService,
 		IndexerService,
-		EncryptionUtil
+		CryptographyUtils
 	],
 })
 export class PassengerModule {}
