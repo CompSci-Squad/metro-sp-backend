@@ -6,6 +6,7 @@ import { FinderService } from './services/finder.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import { StationModule } from '../station/station.module';
+import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
 
 @Module({
   imports: [StationModule],
@@ -16,6 +17,7 @@ import { StationModule } from '../station/station.module';
     FinderService,
     UpdaterService,
     RemoverService,
+    CryptographyUtils,
   ],
   exports: [FinderService],
 })

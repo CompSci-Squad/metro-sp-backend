@@ -13,7 +13,7 @@ export abstract class BaseIndexerService<T extends BaseEntity> {
     this.baseRepository = repository;
   }
 
-  public async index(query?: FindAllOptions<T> ) {
+  public async index(query?: FindAllOptions<T>) {
     try {
       return await this.baseRepository.findAllEntities(query);
     } catch (error) {

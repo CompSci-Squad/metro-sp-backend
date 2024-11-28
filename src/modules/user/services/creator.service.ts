@@ -12,7 +12,10 @@ export class CreatorService {
     private readonly stationFinderService: StationFinderService,
   ) {}
 
-  public async create({ stationId, ...rest }: CreateUserDto): Promise<UserEntity> {
+  public async create({
+    stationId,
+    ...rest
+  }: CreateUserDto): Promise<UserEntity> {
     try {
       const station = await this.stationFinderService.findById(stationId);
       const user = await this.userRepository.createEntity(rest);

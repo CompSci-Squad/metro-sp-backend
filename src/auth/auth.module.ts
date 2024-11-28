@@ -11,7 +11,7 @@ import { LoginValidationMiddleware } from './middlewares/login-validation.middle
   imports: [
     UserModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'teste',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
   ],

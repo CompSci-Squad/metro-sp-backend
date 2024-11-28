@@ -1,4 +1,10 @@
-import { Collection, Entity, OneToOne, Property, Rel } from '@mikro-orm/postgresql';
+import {
+  Collection,
+  Entity,
+  OneToOne,
+  Property,
+  Rel,
+} from '@mikro-orm/postgresql';
 
 import { BaseEntity } from '../../../shared/entities/base.entity';
 
@@ -11,5 +17,5 @@ export class TerminalEntity extends BaseEntity {
   isActive!: boolean;
 
   @OneToOne({ mappedBy: 'terminal' })
-  entrance: Rel<EntranceEntity>
+  entrance: Rel<EntranceEntity>;
 }

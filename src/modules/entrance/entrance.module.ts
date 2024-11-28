@@ -21,8 +21,6 @@ import { TerminalModule } from '../terminal/terminal.module';
     UpdaterService,
     RemoverService,
   ],
-  exports: [
-    FinderService
-  ]
+  exports: [FinderService],
 })
 export class EntranceModule {}

@@ -16,6 +16,7 @@ import { IndexerService } from './services/indexer.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import * as bcrypt from 'bcrypt';
+import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
 
 @Controller('user')
 export class UserController {
@@ -25,6 +26,7 @@ export class UserController {
     private readonly indexerService: IndexerService,
     private readonly updaterService: UpdaterService,
     private readonly removerService: RemoverService,
+    private readonly cryptographyUtils: CryptographyUtils,
   ) {}
 
   @Post()
@@ -32,7 +34,7 @@ export class UserController {
     const data = {
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
-      cpf: await bcrypt.hash(createUserDto.cpf, 10),
+      cpf: await this.cryptographyUtils.encrypt(createUserDto.cpf),
     };
 
     const createdUser = await this.creatorService.create(data);

@@ -1,5 +1,5 @@
 import { defineConfig, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import 'dotenv/config'
+import 'dotenv/config';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { Migrator } from '@mikro-orm/migrations';
@@ -24,5 +24,5 @@ export default defineConfig({
     path: 'dist/shared/database/migrations',
     pathTs: 'src/shared/database/migrations',
     glob: '!(*.d).{js,ts}',
-  }
+  },
 });

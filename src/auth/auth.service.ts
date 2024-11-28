@@ -13,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  login(user: UserEntity): UserToken {
+  async login(user: UserEntity): Promise<UserToken> {
     const payload: UserPayload = {
       sub: user.id,
       email: user.email,
@@ -22,7 +22,7 @@ export class AuthService {
 
     const jwtToken = this.jwtService.sign(payload);
 
-    return {
+    return await {
       access_token: jwtToken,
     };
   }

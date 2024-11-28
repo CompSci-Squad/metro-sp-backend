@@ -42,5 +42,5 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsNumber()
-  stationId: number
+  stationId: number;
 }

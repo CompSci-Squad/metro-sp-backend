@@ -6,6 +6,6 @@ import { TerminalEntity } from '../entities/terminal.entity';
 @Injectable()
 export class IndexerService extends BaseIndexerService<TerminalEntity> {
   constructor(private readonly terminalRepository: TerminalRepository) {
-    super(terminalRepository)
+    super(terminalRepository);
   }
 }

@@ -28,9 +28,9 @@ export class EntranceEntity extends BaseEntity {
   @Enum({ items: () => EntranceStatus, array: true })
   status!: EntranceStatus[];
 
-  @ManyToOne({entity: () => StationEntity})
+  @ManyToOne({ entity: () => StationEntity })
   station!: Rel<StationEntity>;
 
   @OneToOne({ nullable: true, inversedBy: 'entrance' })
-  terminal: Rel<TerminalEntity>
+  terminal: Rel<TerminalEntity>;
 }

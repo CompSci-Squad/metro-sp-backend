@@ -18,7 +18,7 @@ export class PassengerEntity extends BaseDynamoEntity {
     cpf,
     name,
     justificationType,
-    justificationDetails
+    justificationDetails,
   }: {
     id: string;
     image: string;

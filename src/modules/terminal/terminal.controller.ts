@@ -50,7 +50,7 @@ export class TerminalController {
   }
 
   @Delete(':id')
-  remove(@Param() dto: FindOneParamsDto) {
-    return this.removerService.remove(dto.id);
+  async remove(@Param() dto: FindOneParamsDto) {
+    return await this.removerService.remove(dto.id);
   }
 }

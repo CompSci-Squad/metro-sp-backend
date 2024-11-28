@@ -18,6 +18,6 @@ import { EntranceModule } from '../entrance/entrance.module';
     UpdaterService,
     RemoverService,
   ],
-  exports: [FinderService]
+  exports: [FinderService],
 })
 export class TerminalModule {}

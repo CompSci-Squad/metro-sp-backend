@@ -74,7 +74,7 @@ export abstract class BaseRepository<
     await this.em.flush();
   }
 
-  async findAllEntities( options?: FindAllOptions<T>): Promise<T[]> {
+  async findAllEntities(options?: FindAllOptions<T>): Promise<T[]> {
     return await this.findAll(options);
   }
 

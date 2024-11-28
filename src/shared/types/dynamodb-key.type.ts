@@ -1,4 +1,3 @@
 export type KeyType = {
-    id: string;
-  };
-  
+  id: string;
+};
