@@ -15,18 +15,23 @@ import {
 } from "../strategies";
 import { PassengerRepository } from "../repositories/passenger.repository";
 import { ulid } from "ulid";
+import { EncryptionUtil } from "../utils";
 
 @Injectable()
 export class PassengerCreatorContextService {
 	private readonly logger = new Logger(PassengerCreatorContextService.name);
 	private strategy: ValidatePassengerStrategy;
-	private readonly strategyMap: Record<JustificationType, ValidatePassengerStrategy>;
+	private readonly strategyMap: Record<
+		JustificationType,
+		ValidatePassengerStrategy
+	>;
 
 	constructor(
 		private readonly ageStrategy: PassengerValidatorAgeStrategy,
 		private readonly unemployedStrategy: PassengerValidatorUnemployedStrategy,
 		private readonly policeOfficerStrategy: PassengerValidatorPoliceOfficerStrategy,
-		private readonly clientRepository: PassengerRepository
+		private readonly clientRepository: PassengerRepository,
+		private readonly encryptionUtil: EncryptionUtil
 	) {
 		this.strategyMap = {
 			[JustificationType.AGE]: this.ageStrategy,
@@ -50,11 +55,18 @@ export class PassengerCreatorContextService {
 
 			this.setStrategy(strategy);
 
-			if (this.strategy !== null && !(await this.strategy.validate(data.justificationDetails))) {
+			if (
+				this.strategy !== null &&
+				!(await this.strategy.validate(data.justificationDetails))
+			) {
 				throw new BadRequestException("Invalid justification details");
 			}
 			return await this.clientRepository.createItem(
-				new PassengerEntity({ ...data, id: ulid() })
+				new PassengerEntity({
+					...data,
+					id: ulid(),
+					cpf: this.encryptionUtil.encrypt(data.cpf),
+				})
 			);
 		} catch (error) {
 			this.logger.error(error);

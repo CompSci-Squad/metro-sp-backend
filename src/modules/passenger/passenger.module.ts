@@ -15,6 +15,7 @@ import {
 	RemoverService,
 	UpdaterService,
 } from "./services";
+import { EncryptionUtil } from "./utils";
 
 @Module({
 	controllers: [PassengerController],
@@ -34,6 +35,7 @@ import {
 		UpdaterService,
 		RemoverService,
 		IndexerService,
+		EncryptionUtil
 	],
 })
 export class PassengerModule {}
