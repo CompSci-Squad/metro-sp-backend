@@ -9,31 +9,33 @@ import {
   PassengerValidatorAgeStrategy,
 } from './strategies';
 import {
-  PassengerCreatorContextService,
-  FinderService,
-  IndexerService,
-  RemoverService,
-  UpdaterService,
-} from './services';
+	PassengerCreatorContextService,
+	FinderService,
+	IndexerService,
+	RemoverService,
+	UpdaterService,
+} from "./services";
+import { EncryptionUtil } from "./utils";
 
 @Module({
-  controllers: [PassengerController],
-  imports: [ConfigModule],
-  providers: [
-    {
-      provide: PassengerRepository,
-      useFactory: (configService: ConfigService) =>
-        PassengerRepositorySingleton.getInstance(configService),
-      inject: [ConfigService],
-    },
-    PassengerValidatorAgeStrategy,
-    PassengerValidatorPoliceOfficerStrategy,
-    PassengerValidatorUnemployedStrategy,
-    PassengerCreatorContextService,
-    FinderService,
-    UpdaterService,
-    RemoverService,
-    IndexerService,
-  ],
+	controllers: [PassengerController],
+	imports: [ConfigModule],
+	providers: [
+		{
+			provide: PassengerRepository,
+			useFactory: (configService: ConfigService) =>
+				PassengerRepositorySingleton.getInstance(configService),
+			inject: [ConfigService],
+		},
+		PassengerValidatorAgeStrategy,
+		PassengerValidatorPoliceOfficerStrategy,
+		PassengerValidatorUnemployedStrategy,
+		PassengerCreatorContextService,
+		FinderService,
+		UpdaterService,
+		RemoverService,
+		IndexerService,
+		EncryptionUtil
+	],
 })
 export class PassengerModule {}

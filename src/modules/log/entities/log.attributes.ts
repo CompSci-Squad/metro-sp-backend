@@ -3,9 +3,9 @@ import {
   KeySchemaElement,
   LocalSecondaryIndex,
   KeyType,
+  GlobalSecondaryIndex,
 } from '@aws-sdk/client-dynamodb';
 
-// Enum for attribute names and types to ensure consistent usage
 enum AttributeName {
   ID = 'id',
   TIMESTAMP = 'timestamp',
@@ -19,7 +19,17 @@ enum AttributeType {
   Binary = 'B',
 }
 
-// Helper function for creating a key schema
+const createGlobalSecondaryIndex = (
+  indexName: string,
+  hashKey: AttributeName,
+  rangeKey: AttributeName,
+): GlobalSecondaryIndex => ({
+  IndexName: indexName,
+  KeySchema: createKeySchema(hashKey, rangeKey),
+  Projection: { ProjectionType: 'ALL' },
+  ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 },
+});
+
 const createKeySchema = (
   hashKey: AttributeName,
   rangeKey?: AttributeName,
@@ -30,7 +40,6 @@ const createKeySchema = (
     : []),
 ];
 
-// Helper function for creating a local secondary index
 const createSecondaryIndex = (
   indexName: string,
   hashKey: AttributeName,
@@ -41,14 +50,12 @@ const createSecondaryIndex = (
   Projection: { ProjectionType: 'ALL' },
 });
 
-// Main table key schema definition
 export const logKeyAttributes: KeySchemaElement[] = createKeySchema(
   AttributeName.ID,
   AttributeName.TIMESTAMP,
 );
 
-// Global secondary indexes
-export const logGlobalSecondaryIndexes: LocalSecondaryIndex[] = [
+export const logLocalSecondaryIndexes: LocalSecondaryIndex[] = [
   createSecondaryIndex('level-index', AttributeName.ID, AttributeName.LEVEL),
   createSecondaryIndex(
     'message-index',
@@ -57,7 +64,14 @@ export const logGlobalSecondaryIndexes: LocalSecondaryIndex[] = [
   ),
 ];
 
-// Helper function to create attribute definitions
+export const logGlobalSecondaryIndexes: GlobalSecondaryIndex[] = [
+  createGlobalSecondaryIndex(
+    'global-level-index',
+    AttributeName.ID,
+    AttributeName.LEVEL,
+  ),
+];
+
 const createAttributeDefinition = (
   name: AttributeName,
   type: AttributeType,

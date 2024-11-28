@@ -1,1 +1,1 @@
-export { EncryptionUtil } from './encryption.utils';
+export { EncryptionUtil } from './encryption.util'

@@ -9,35 +9,37 @@ import { ValidatePassengerStrategy } from '../interfaces/validate-passenger.inte
 import { PassengerEntity } from '../entities/passenger';
 import { JustificationType } from '../enums/justification-type.enum';
 import {
-  PassengerValidatorAgeStrategy,
-  PassengerValidatorUnemployedStrategy,
-  PassengerValidatorPoliceOfficerStrategy,
-} from '../strategies';
-import { PassengerRepository } from '../repositories/passenger.repository';
-import { ulid } from 'ulid';
+	PassengerValidatorAgeStrategy,
+	PassengerValidatorUnemployedStrategy,
+	PassengerValidatorPoliceOfficerStrategy,
+} from "../strategies";
+import { PassengerRepository } from "../repositories/passenger.repository";
+import { ulid } from "ulid";
+import { EncryptionUtil } from "../utils";
 
 @Injectable()
 export class PassengerCreatorContextService {
-  private readonly logger = new Logger(PassengerCreatorContextService.name);
-  private strategy: ValidatePassengerStrategy;
-  private readonly strategyMap: Record<
-    JustificationType,
-    ValidatePassengerStrategy
-  >;
+	private readonly logger = new Logger(PassengerCreatorContextService.name);
+	private strategy: ValidatePassengerStrategy;
+	private readonly strategyMap: Record<
+		JustificationType,
+		ValidatePassengerStrategy
+	>;
 
-  constructor(
-    private readonly ageStrategy: PassengerValidatorAgeStrategy,
-    private readonly unemployedStrategy: PassengerValidatorUnemployedStrategy,
-    private readonly policeOfficerStrategy: PassengerValidatorPoliceOfficerStrategy,
-    private readonly clientRepository: PassengerRepository,
-  ) {
-    this.strategyMap = {
-      [JustificationType.AGE]: this.ageStrategy,
-      [JustificationType.UNEMPLOYED]: this.unemployedStrategy,
-      [JustificationType.POLICEOFFICER]: this.policeOfficerStrategy,
-      [JustificationType.PCD]: null,
-    };
-  }
+	constructor(
+		private readonly ageStrategy: PassengerValidatorAgeStrategy,
+		private readonly unemployedStrategy: PassengerValidatorUnemployedStrategy,
+		private readonly policeOfficerStrategy: PassengerValidatorPoliceOfficerStrategy,
+		private readonly clientRepository: PassengerRepository,
+		private readonly encryptionUtil: EncryptionUtil
+	) {
+		this.strategyMap = {
+			[JustificationType.AGE]: this.ageStrategy,
+			[JustificationType.UNEMPLOYED]: this.unemployedStrategy,
+			[JustificationType.POLICEOFFICER]: this.policeOfficerStrategy,
+			[JustificationType.PCD]: null,
+		};
+	}
 
   private setStrategy(strategy: ValidatePassengerStrategy) {
     this.strategy = strategy;
@@ -53,18 +55,22 @@ export class PassengerCreatorContextService {
 
       this.setStrategy(strategy);
 
-      if (
-        this.strategy !== null &&
-        !(await this.strategy.validate(data.justificationDetails))
-      ) {
-        throw new BadRequestException('Invalid justification details');
-      }
-      return await this.clientRepository.createItem(
-        new PassengerEntity({ ...data, id: ulid() }),
-      );
-    } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException(error);
-    }
-  }
+			if (
+				this.strategy !== null &&
+				!(await this.strategy.validate(data.justificationDetails))
+			) {
+				throw new BadRequestException("Invalid justification details");
+			}
+			return await this.clientRepository.createItem(
+				new PassengerEntity({
+					...data,
+					id: ulid(),
+					cpf: this.encryptionUtil.encrypt(data.cpf),
+				})
+			);
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerErrorException(error);
+		}
+	}
 }

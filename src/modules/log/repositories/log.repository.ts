@@ -6,8 +6,9 @@ import {
 import { DynamoDBRepository } from '../../../shared/repositories/dynamo.repository'; // Path to your generic repository
 import {
   logAttributes,
-  logGlobalSecondaryIndexes,
+  logLocalSecondaryIndexes,
   logKeyAttributes,
+  logGlobalSecondaryIndexes,
 } from '../entities/log.attributes';
 import { DynamoDBClient, GlobalSecondaryIndex } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
@@ -20,8 +21,8 @@ export class LogRepository extends DynamoDBRepository<
   protected readonly logger = new Logger(LogRepository.name);
   protected tableName = 'logs';
   protected keyAttributes = logKeyAttributes;
-  protected secondaryIndexes = logGlobalSecondaryIndexes;
-  protected globalSecondaryIndexes = [];
+  protected secondaryIndexes = logLocalSecondaryIndexes;
+  protected globalSecondaryIndexes = logGlobalSecondaryIndexes;
   protected attributes = logAttributes;
 
   constructor(dbClient: DynamoDBClient, docClient: DynamoDBDocumentClient) {
