@@ -5,8 +5,10 @@ import { IndexerService } from './services/indexer.service';
 import { FinderService } from './services/finder.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
+import { StationModule } from '../station/station.module';
 
 @Module({
+  imports: [StationModule],
   controllers: [UserController],
   providers: [
     CreatorService,
