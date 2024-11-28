@@ -64,7 +64,7 @@ export abstract class BaseRepository<
     entity['deletedAt'] = new Date();
     await this.em.flush();
   }
-
+  
   async softDeleteByEmail(email: string): Promise<void> {
     const entity = await this.findByEmail(email);
     if (!entity) {
@@ -74,8 +74,8 @@ export abstract class BaseRepository<
     await this.em.flush();
   }
 
-  async findAllEntities(options?: FindAllOptions<T>): Promise<T[]> {
-    return await this.findAll(options);
+  async findAllEntities(query?: FindAllOptions<T>): Promise<T[]> {
+    return await this.findAll(query);
   }
 
   async findAllIncludingSoftDeleted(): Promise<T[]> {
