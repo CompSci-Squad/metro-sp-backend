@@ -4,8 +4,10 @@ import { BaseIndexerService } from '../../../shared/services/base-indexer.servic
 import { TerminalEntity } from '../entities/terminal.entity';
 
 @Injectable()
-export class IndexerService extends BaseIndexerService<TerminalEntity> {
+export class IndexerService {
   constructor(private readonly terminalRepository: TerminalRepository) {
-    super(terminalRepository);
   }
+  public async index() {
+    return this.terminalRepository.findAll({ populate: ['entrance'] });
+   }
 }

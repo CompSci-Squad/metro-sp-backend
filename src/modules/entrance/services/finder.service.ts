@@ -9,8 +9,16 @@ import { EntranceEntity } from '../entities/entrance.entity';
 import { BaseFinderService } from '../../../shared/services/base-finder.service';
 
 @Injectable()
-export class FinderService extends BaseFinderService<EntranceEntity> {
+export class FinderService  {
   constructor(private readonly entranceRepository: EntranceRepository) {
-    super(entranceRepository);
   }
+  public async findById(id: number) {
+    try {
+      return await this.entranceRepository.findOneOrFail(id, { populate: ['station', 'terminal'] });
+    } catch (error) {
+      if (error instanceof NotFoundError) throw new NotFoundException();
+      throw new InternalServerErrorException(error);
+    }
+  }
+  
 }
