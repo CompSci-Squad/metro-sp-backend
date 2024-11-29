@@ -17,9 +17,13 @@ export abstract class BaseRepository<
   T extends BaseEntity,
 > extends EntityRepository<T> {
   async createEntity(info: Partial<T>): Promise<T> {
-    const entity = this.create(info as T);
-    await this.em.persistAndFlush(entity);
-    return entity;
+    try {
+      const entity = this.create(info as T);
+      await this.em.persistAndFlush(entity);
+      return entity;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findById(id: number): Promise<T | null> {
@@ -27,8 +31,23 @@ export abstract class BaseRepository<
     return this.findOneOrFail(query);
   }
 
+  async findByEmail(email: string): Promise<T | null> {
+    const query: FilterQuery<T> = { email } as FilterQuery<T>;
+    return this.findOneOrFail(query);
+  }
+
   async update(id: number, data: EntityData<T>): Promise<T> {
     const entity = await this.findById(id);
+    if (!entity) {
+      throw new Error('Entity not found');
+    }
+    this.assign(entity, data as any);
+    await this.em.persistAndFlush(entity);
+    return entity;
+  }
+
+  async updateByEmail(email: string, data: EntityData<T>): Promise<T> {
+    const entity = await this.findByEmail(email);
     if (!entity) {
       throw new Error('Entity not found');
     }
@@ -45,9 +64,18 @@ export abstract class BaseRepository<
     entity['deletedAt'] = new Date();
     await this.em.flush();
   }
+  
+  async softDeleteByEmail(email: string): Promise<void> {
+    const entity = await this.findByEmail(email);
+    if (!entity) {
+      throw new Error('Entity not found');
+    }
+    entity['deletedAt'] = new Date();
+    await this.em.flush();
+  }
 
-  async findAllEntities( options?: FindAllOptions<T>): Promise<T[]> {
-    return await this.findAll(options);
+  async findAllEntities(query?: FindAllOptions<T>): Promise<T[]> {
+    return await this.findAll(query);
   }
 
   async findAllIncludingSoftDeleted(): Promise<T[]> {

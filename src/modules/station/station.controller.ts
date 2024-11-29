@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Permissions } from '../../shared/decorators/permissions.decorator';
 import { CreateStationDto } from './dto/create-station.dto';
 import { UpdateStationDto } from './dto/update-station.dto';
 import { CreatorService } from './services/creator.service';
@@ -15,6 +16,7 @@ import { FinderService } from './services/finder.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import { FindOneParamsDto } from './dto/find-one-params.dto';
+import { UserPermissions } from '../user/enums/user-permissions.enum';
 
 @Controller('station')
 export class StationController {

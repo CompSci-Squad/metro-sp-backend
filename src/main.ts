@@ -28,9 +28,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Metro SP Core API')
-    .setDescription(
-      'Referências para as chamadas de API',
-    )
+    .setDescription('Referências para as chamadas de API')
     .setVersion('1.0')
     .addApiKey()
     .build();

@@ -93,14 +93,14 @@ export abstract class DynamoDBRepository<
       'update item',
     );
 
-    return await this.getItem(key)
+    return await this.getItem(key);
   }
 
   public async updateItemById(
     id: string,
     updateExpression: string,
-    expressionValues: Record<string, any>
-): Promise<void> {
+    expressionValues: Record<string, any>,
+  ): Promise<void> {
     const params: UpdateCommandInput = {
       TableName: this.tableName,
       Key: { id: id },
@@ -113,8 +113,7 @@ export abstract class DynamoDBRepository<
       new UpdateCommand(params),
       'update item by id',
     );
-}
-
+  }
 
   public async deleteItem(key: K): Promise<void> {
     const params = {
@@ -132,7 +131,7 @@ export abstract class DynamoDBRepository<
     const params = {
       TableName: this.tableName,
       Key: {
-        id: id
+        id: id,
       },
     };
 
@@ -140,7 +139,7 @@ export abstract class DynamoDBRepository<
       new DeleteCommand(params),
       'delete item by id',
     );
-}
+  }
 
   public async queryItems(
     keyConditionExpression?: string,

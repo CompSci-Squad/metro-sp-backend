@@ -49,22 +49,22 @@ const createGlobalSecondaryIndex = (
 
 // Main table key schema definition (using createdAt as the RANGE key now)
 export const passengerKeyAttributes: KeySchemaElement[] = createKeySchema(
-	AttributeName.ID,        // Partition key (ID)
-	AttributeName.CREATEDAT  // Range key (createdAt)
+  AttributeName.ID, // Partition key (ID)
+  AttributeName.CREATEDAT, // Range key (createdAt)
 );
 
 // Global secondary indexes
 export const passengerGlobalSecondaryIndexes: GlobalSecondaryIndex[] = [
-	createGlobalSecondaryIndex(
-		"name-index",
-		AttributeName.ID,
-		AttributeName.NAME
-	),
-	createGlobalSecondaryIndex(
-		"cpf-index",
-		AttributeName.CPF, 
-		AttributeName.CREATEDAT
-	  ),
+  createGlobalSecondaryIndex(
+    'name-index',
+    AttributeName.ID,
+    AttributeName.NAME,
+  ),
+  createGlobalSecondaryIndex(
+    'cpf-index',
+    AttributeName.CPF,
+    AttributeName.CREATEDAT,
+  ),
 ];
 
 // Helper function for creating a local secondary index
@@ -80,27 +80,27 @@ const createSecondaryIndex = (
 
 // Local secondary indexes (now `createdAt` as range key is in effect)
 export const passengerLocalSecondaryIndexes: LocalSecondaryIndex[] = [
-	createSecondaryIndex(
-		"createdAt-index",
-		AttributeName.ID,
-		AttributeName.CREATEDAT  // CreatedAt is now the range key
-	),
-	createSecondaryIndex(
-		"updatedAt-index",
-		AttributeName.ID,
-		AttributeName.UPDATEDAT
-	),
-	createSecondaryIndex("image-index", AttributeName.ID, AttributeName.IMAGE),
-	createSecondaryIndex(
-		"justificationType-index",
-		AttributeName.ID,
-		AttributeName.JUSTIFICATIONTYPE
-	),
-	createSecondaryIndex(
-		"justificationDetails-index",
-		AttributeName.ID,
-		AttributeName.JUSTIFICATIONDETAILS
-	),
+  createSecondaryIndex(
+    'createdAt-index',
+    AttributeName.ID,
+    AttributeName.CREATEDAT, // CreatedAt is now the range key
+  ),
+  createSecondaryIndex(
+    'updatedAt-index',
+    AttributeName.ID,
+    AttributeName.UPDATEDAT,
+  ),
+  createSecondaryIndex('image-index', AttributeName.ID, AttributeName.IMAGE),
+  createSecondaryIndex(
+    'justificationType-index',
+    AttributeName.ID,
+    AttributeName.JUSTIFICATIONTYPE,
+  ),
+  createSecondaryIndex(
+    'justificationDetails-index',
+    AttributeName.ID,
+    AttributeName.JUSTIFICATIONDETAILS,
+  ),
 ];
 
 // Helper function to create attribute definitions
@@ -112,7 +112,7 @@ const createAttributeDefinition = (
 	AttributeType: type,
 });
 
-// Attribute definitions for main table and indexes
+
 export const passengerAttributes: AttributeDefinition[] = [
 	createAttributeDefinition(AttributeName.ID, AttributeType.String),
 	createAttributeDefinition(AttributeName.NAME, AttributeType.String),

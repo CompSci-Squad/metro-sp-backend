@@ -9,4 +9,8 @@ import { BaseRemoverService } from '../../../shared/services/base-remover.servic
 import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
-export class RemoverService extends BaseRemoverService<UserEntity> {}
+export class RemoverService extends BaseRemoverService<UserEntity> {
+  constructor(private readonly userRepository: UserRepository) {
+    super(userRepository);
+  }
+}

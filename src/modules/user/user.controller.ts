@@ -15,6 +15,8 @@ import { FindOneParamsDto } from './dto/find-one-params.dto';
 import { IndexerService } from './services/indexer.service';
 import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
+import * as bcrypt from 'bcrypt';
+import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
 
 @Controller('user')
 export class UserController {
@@ -24,11 +26,24 @@ export class UserController {
     private readonly indexerService: IndexerService,
     private readonly updaterService: UpdaterService,
     private readonly removerService: RemoverService,
+    private readonly cryptographyUtils: CryptographyUtils,
   ) {}
 
   @Post()
   public async create(@Body() createUserDto: CreateUserDto) {
-    return this.creatorService.create(createUserDto);
+    const data = {
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
+      cpf: await this.cryptographyUtils.encrypt(createUserDto.cpf),
+    };
+
+    const createdUser = await this.creatorService.create(data);
+
+    return {
+      ...createdUser,
+      password: undefined,
+      cpf: undefined,
+    };
   }
 
   @Get()
@@ -36,21 +51,21 @@ export class UserController {
     return this.indexerService.index();
   }
 
-  @Get(':id')
+  @Get(':email')
   public async findOne(@Param() dto: FindOneParamsDto) {
-    return this.finderService.findById(dto.id);
+    return this.finderService.findByEmail(dto.email);
   }
 
-  @Patch(':id')
+  @Patch(':email')
   public async update(
     @Param() dto: FindOneParamsDto,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.updaterService.update(dto.id, updateUserDto);
+    return this.updaterService.updateByEmail(dto.email, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param() dto: FindOneParamsDto) {
-    return this.removerService.remove(dto.id);
+  @Delete(':email')
+  public async remove(@Param() dto: FindOneParamsDto) {
+    return this.removerService.removeByEmail(dto.email);
   }
 }

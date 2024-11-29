@@ -1,7 +1,7 @@
 export abstract class BaseDynamoEntity {
-    id: string;
+  id: string;
 
-    constructor(id: string) {
-        this.id = id;
-    }
+  constructor(id: string) {
+    this.id = id;
+  }
 }

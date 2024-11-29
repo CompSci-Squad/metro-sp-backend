@@ -55,9 +55,9 @@ export class PassengerRepository extends DynamoDBRepository<
       );
 
       const item = result?.Items?.[0];
-      return DynamoDBItemTransformer.transform(item) as PassengerEntity
+      return DynamoDBItemTransformer.transform(item) as PassengerEntity;
     } catch (error) {
-      this.logger.error("Error fetching item by CPF:", error);
+      this.logger.error('Error fetching item by CPF:', error);
       throw error;
     }
   }
