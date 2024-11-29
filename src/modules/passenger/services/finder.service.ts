@@ -30,4 +30,18 @@ export class FinderService extends DynamoBaseFinderService<
 			throw new InternalServerErrorException(error);
 		}
 	}
+
+	public async findByCpf(cpf: string): Promise<PassengerEntity> {
+		try {
+            const encryptedCpf = this.cryptographyUtil.encrypt(cpf);
+
+            const item = await this.passengerRepository.getItemByCpf(
+                encryptedCpf
+            );
+            return {...item, cpf: this.cryptographyUtil.decrypt(item.cpf) };
+        } catch (error) {
+            this.logger.error(error);
+            throw new InternalServerErrorException(error);
+        }
+	}
 }

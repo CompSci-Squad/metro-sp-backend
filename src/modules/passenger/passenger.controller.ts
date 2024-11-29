@@ -21,6 +21,7 @@ import {
 } from "./services";
 import { FindOneParamsDto } from "./dto/find-one-params.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { FindByCpfDto } from "./dto/find-by-cpf.dto";
 
 @Controller("passenger")
 export class PassengerController {
@@ -46,6 +47,11 @@ export class PassengerController {
 	@Get(":id")
 	async findOne(@Param() { id }: FindOneParamsDto) {
 		return this.finderService.findById(id);
+	}
+
+	@Get("cpf/:cpf")
+	async findByCpf(@Param() { cpf }: FindByCpfDto) {
+		return this.finderService.findByCpf(cpf);
 	}
 
 	@Patch(":id")

@@ -59,7 +59,6 @@ export class PassengerCreatorContextService {
 	}
 
 	private async uploadS3(file: Buffer, bucket: string, imageKey: string) {
-		const region = this.configService.get("AWS_REGION");
 		const s3 = this.s3Provider.getS3();
 		const s3Params: PutObjectCommandInput = {
 			Bucket: bucket,
@@ -71,7 +70,8 @@ export class PassengerCreatorContextService {
 		try {
 			await s3.send(new PutObjectCommand(s3Params));
 			this.logger.log(`Image uploaded successfully to S3: ${imageKey}`);
-			return `https://${bucket}.s3.${region}.amazonaws.com/${imageKey}`;
+			const localStackUrl = `http://localhost:4566/${bucket}/${imageKey}`;
+			return localStackUrl;
 		} catch (err) {
 			this.logger.error("Error uploading image:", err);
 			throw new InternalServerErrorException("Image upload failed");

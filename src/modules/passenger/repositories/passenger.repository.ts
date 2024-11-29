@@ -10,9 +10,10 @@ import {
   passengerGlobalSecondaryIndexes,
   passengerLocalSecondaryIndexes,
 } from '../entities/passenger.attributes';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { PassengerEntity } from '../entities/passenger';
+import { DynamoDBItemTransformer } from '../../../shared/utils/dynamodb-item-transformer.util';
 
 export class PassengerRepository extends DynamoDBRepository<
   PassengerEntity,
@@ -34,5 +35,30 @@ export class PassengerRepository extends DynamoDBRepository<
         `Table initialization failed: ${error.message}`,
       );
     });
+  }
+
+  public async getItemByCpf(cpf: string): Promise<PassengerEntity> {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'cpf-index',
+      KeyConditionExpression: 'cpf = :cpf',
+      ExpressionAttributeValues: {
+        ':cpf': { S: cpf },
+      },
+      Limit: 1,
+    };
+
+    try {
+      const result = await this.sendCommandWithErrorHandling(
+        new QueryCommand(params),
+        'fetch items',
+      );
+
+      const item = result?.Items?.[0];
+      return DynamoDBItemTransformer.transform(item) as PassengerEntity
+    } catch (error) {
+      this.logger.error("Error fetching item by CPF:", error);
+      throw error;
+    }
   }
 }
