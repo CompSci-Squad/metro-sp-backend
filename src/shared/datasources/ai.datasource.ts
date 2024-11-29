@@ -12,7 +12,7 @@ export class AIDatasource extends DataSource {
     httpService: HttpService,
   ) {
     super(httpService);
-    const connectionString = configService.get<string>('ASSESSMENT_API_URL');
+    const connectionString = configService.get<string>('AI_API_URL');
 
     this.baseUrl = connectionString;
     this.headers = {

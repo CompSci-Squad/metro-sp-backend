@@ -7,6 +7,8 @@ import {
 	Param,
 	Delete,
 	HttpCode,
+	UseInterceptors,
+	UploadedFile,
 } from "@nestjs/common";
 import { CreatePassengerDto } from "./dto/create-passenger.dto";
 import { UpdatePassengerDto } from "./dto/update-passenger.dto";
@@ -18,6 +20,7 @@ import {
 	UpdaterService,
 } from "./services";
 import { FindOneParamsDto } from "./dto/find-one-params.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("passenger")
 export class PassengerController {
@@ -30,8 +33,9 @@ export class PassengerController {
 	) {}
 
 	@Post()
-	async create(@Body() createPassengerDto: CreatePassengerDto) {
-		return this.creatorService.create(createPassengerDto);
+	@UseInterceptors(FileInterceptor('image'))
+	async create(@Body() createPassengerDto: CreatePassengerDto, @UploadedFile() image: Express.Multer.File) {
+		return this.creatorService.create(createPassengerDto, image);
 	}
 
 	@Get()

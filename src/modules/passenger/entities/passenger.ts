@@ -14,18 +14,18 @@ export class PassengerEntity extends BaseDynamoEntity {
 
   constructor({
     id,
-    image,
     cpf,
     name,
     justificationType,
-    justificationDetails
+    justificationDetails,
+    image,
   }: {
     id: string;
-    image: string;
     cpf: string;
     name: string;
     justificationType: JustificationType;
     justificationDetails: string;
+    image?: string;
   }) {
     super(id);
     this.image = image;

@@ -15,12 +15,6 @@ export class CreatePassengerDto {
   @IsCpfValid()
   cpf: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  @IsBase64()
-  image: string;
-
   @ApiProperty({ enum: JustificationType })
   @IsEnum(JustificationType)
   justificationType: JustificationType;

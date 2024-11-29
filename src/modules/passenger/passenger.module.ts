@@ -16,10 +16,11 @@ import {
 	UpdaterService,
 } from "./services";
 import { CryptographyUtils } from "../../shared/utils/cryptography.utils";
+import { AIModule } from "../ai/ai.module";
 
 @Module({
 	controllers: [PassengerController],
-	imports: [ConfigModule],
+	imports: [ConfigModule, AIModule],
 	providers: [
 		{
 			provide: PassengerRepository,

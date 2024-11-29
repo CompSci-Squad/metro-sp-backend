@@ -1,4 +1,3 @@
-# Use postgres and dynamodb-local containers
 version: '3.1'
 
 services:
@@ -14,11 +13,16 @@ services:
     ports: 
       - "5432:5432"
 
-  # DynamoDB Local Service
-  dynamodb:
-    image: amazon/dynamodb-local
-    container_name: dynamodb_local
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
     ports:
-      - "8000:8000"
-    command: "-jar DynamoDBLocal.jar -sharedDb"
-
+      - "4566:4566"
+      - "4572:4572"
+    environment:
+      - SERVICES=dynamodb,s3 
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
