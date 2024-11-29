@@ -15,7 +15,7 @@ import {
 } from "../strategies";
 import { PassengerRepository } from "../repositories/passenger.repository";
 import { ulid } from "ulid";
-import { EncryptionUtil } from "../utils";
+import { CryptographyUtils } from "../../../shared/utils/cryptography.utils";
 
 @Injectable()
 export class PassengerCreatorContextService {
@@ -31,7 +31,7 @@ export class PassengerCreatorContextService {
 		private readonly unemployedStrategy: PassengerValidatorUnemployedStrategy,
 		private readonly policeOfficerStrategy: PassengerValidatorPoliceOfficerStrategy,
 		private readonly clientRepository: PassengerRepository,
-		private readonly encryptionUtil: EncryptionUtil
+		private readonly cryptographyUtil: CryptographyUtils
 	) {
 		this.strategyMap = {
 			[JustificationType.AGE]: this.ageStrategy,
@@ -61,11 +61,13 @@ export class PassengerCreatorContextService {
 			) {
 				throw new BadRequestException("Invalid justification details");
 			}
+
+			
 			return await this.clientRepository.createItem(
 				new PassengerEntity({
 					...data,
 					id: ulid(),
-					cpf: this.encryptionUtil.encrypt(data.cpf),
+					cpf: this.cryptographyUtil.encrypt(data.cpf),
 				})
 			);
 		} catch (error) {
