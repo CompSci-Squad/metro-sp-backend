@@ -20,9 +20,9 @@ export class AuthService {
       name: user.name,
     };
 
-    const jwtToken = this.jwtService.sign(payload);
+    const jwtToken = await this.jwtService.signAsync(payload);
 
-    return await {
+    return {
       access_token: jwtToken,
     };
   }
