@@ -18,6 +18,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { LogModule } from './modules/log/log.module';
 import { PassengerModule } from './modules/passenger/passenger.module';
+import { AIModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PassengerModule } from './modules/passenger/passenger.module';
     JwtModule,
     LogModule,
     PassengerModule,
+    AIModule,
   ],
   providers: [
     {

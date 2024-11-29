@@ -47,11 +47,23 @@ const createGlobalSecondaryIndex = (
   ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 },
 });
 
+// Main table key schema definition (using createdAt as the RANGE key now)
+export const passengerKeyAttributes: KeySchemaElement[] = createKeySchema(
+  AttributeName.ID, // Partition key (ID)
+  AttributeName.CREATEDAT, // Range key (createdAt)
+);
+
+// Global secondary indexes
 export const passengerGlobalSecondaryIndexes: GlobalSecondaryIndex[] = [
   createGlobalSecondaryIndex(
     'name-index',
     AttributeName.ID,
     AttributeName.NAME,
+  ),
+  createGlobalSecondaryIndex(
+    'cpf-index',
+    AttributeName.CPF,
+    AttributeName.CREATEDAT,
   ),
 ];
 
@@ -77,7 +89,7 @@ export const passengerLocalSecondaryIndexes: LocalSecondaryIndex[] = [
   createSecondaryIndex(
     'createdAt-index',
     AttributeName.ID,
-    AttributeName.CREATEDAT,
+    AttributeName.CREATEDAT, // CreatedAt is now the range key
   ),
   createSecondaryIndex(
     'updatedAt-index',

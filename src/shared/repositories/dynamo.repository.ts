@@ -170,7 +170,7 @@ export abstract class DynamoDBRepository<
     return DynamoDBRepository.transform(result.Items) as T[];
   }
 
-  private async sendCommandWithErrorHandling(
+  protected async sendCommandWithErrorHandling(
     command: any,
     action: string,
   ): Promise<any> {

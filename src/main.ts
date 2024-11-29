@@ -6,6 +6,7 @@ import compression from 'compression';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
   app.use(helmet());
   app.use(nocache());
   app.use(compression());
+  app.use(json({ limit: '3gb' }));
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({

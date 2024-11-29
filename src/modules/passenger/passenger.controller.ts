@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   HttpCode,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { UpdatePassengerDto } from './dto/update-passenger.dto';
@@ -18,6 +20,8 @@ import {
   UpdaterService,
 } from './services';
 import { FindOneParamsDto } from './dto/find-one-params.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FindByCpfDto } from './dto/find-by-cpf.dto';
 
 @Controller('passenger')
 export class PassengerController {
@@ -30,8 +34,12 @@ export class PassengerController {
   ) {}
 
   @Post()
-  async create(@Body() createPassengerDto: CreatePassengerDto) {
-    return this.creatorService.create(createPassengerDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() createPassengerDto: CreatePassengerDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.creatorService.create(createPassengerDto, image);
   }
 
   @Get()
@@ -42,6 +50,11 @@ export class PassengerController {
   @Get(':id')
   async findOne(@Param() { id }: FindOneParamsDto) {
     return this.finderService.findById(id);
+  }
+
+  @Get('cpf/:cpf')
+  async findByCpf(@Param() { cpf }: FindByCpfDto) {
+    return this.finderService.findByCpf(cpf);
   }
 
   @Patch(':id')

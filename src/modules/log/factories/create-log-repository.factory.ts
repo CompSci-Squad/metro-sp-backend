@@ -19,14 +19,11 @@ export class LogRepositorySingleton {
     configService: ConfigService,
   ): LogRepository {
     const dbClient = new DynamoDBClient({
-      region: configService.get<string>('DYNAMODB_REGION') || 'local',
-      endpoint:
-        configService.get<string>('DYNAMODB_ENDPOINT') ||
-        'http://localhost:8000',
+      region: configService.get('AWS_REGION') ?? 'us-east-1',
+      endpoint: configService.get('AWS_ENDPOINT') ?? 'http://localhost:4566',
       credentials: {
-        accessKeyId: configService.get<string>('AWS_ACCESS_KEY_ID') || '',
-        secretAccessKey:
-          configService.get<string>('AWS_SECRET_ACCESS_KEY') || '',
+        accessKeyId: configService.get('AWS_ACCESS_KEY') ?? 'test',
+        secretAccessKey: configService.get('AWS_SECRET_KEY') ?? 'test',
       },
     });
 

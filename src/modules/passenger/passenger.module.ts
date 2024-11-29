@@ -9,33 +9,34 @@ import {
   PassengerValidatorAgeStrategy,
 } from './strategies';
 import {
-	PassengerCreatorContextService,
-	FinderService,
-	IndexerService,
-	RemoverService,
-	UpdaterService,
-} from "./services";
-import { CryptographyUtils } from "../../shared/utils/cryptography.utils";
+  PassengerCreatorContextService,
+  FinderService,
+  IndexerService,
+  RemoverService,
+  UpdaterService,
+} from './services';
+import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
+import { AIModule } from '../ai/ai.module';
 
 @Module({
-	controllers: [PassengerController],
-	imports: [ConfigModule],
-	providers: [
-		{
-			provide: PassengerRepository,
-			useFactory: (configService: ConfigService) =>
-				PassengerRepositorySingleton.getInstance(configService),
-			inject: [ConfigService],
-		},
-		PassengerValidatorAgeStrategy,
-		PassengerValidatorPoliceOfficerStrategy,
-		PassengerValidatorUnemployedStrategy,
-		PassengerCreatorContextService,
-		FinderService,
-		UpdaterService,
-		RemoverService,
-		IndexerService,
-		CryptographyUtils
-	],
+  controllers: [PassengerController],
+  imports: [ConfigModule, AIModule],
+  providers: [
+    {
+      provide: PassengerRepository,
+      useFactory: (configService: ConfigService) =>
+        PassengerRepositorySingleton.getInstance(configService),
+      inject: [ConfigService],
+    },
+    PassengerValidatorAgeStrategy,
+    PassengerValidatorPoliceOfficerStrategy,
+    PassengerValidatorUnemployedStrategy,
+    PassengerCreatorContextService,
+    FinderService,
+    UpdaterService,
+    RemoverService,
+    IndexerService,
+    CryptographyUtils,
+  ],
 })
 export class PassengerModule {}

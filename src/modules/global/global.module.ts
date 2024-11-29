@@ -4,6 +4,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { StationEntity } from '../station/entities/station.entity';
 import { EntranceEntity } from '../entrance/entities/entrance.entity';
 import { TerminalEntity } from '../terminal/entities/terminal.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Global()
 @Module({
@@ -14,7 +15,8 @@ import { TerminalEntity } from '../terminal/entities/terminal.entity';
       EntranceEntity,
       TerminalEntity,
     ]),
+    HttpModule,
   ],
-  exports: [MikroOrmModule],
+  exports: [MikroOrmModule, HttpModule],
 })
 export class GlobalModule {}
