@@ -17,6 +17,7 @@ import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import * as bcrypt from 'bcrypt';
 import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
+import { IsPublic } from '../../auth/decorators/is-public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -29,6 +30,7 @@ export class UserController {
     private readonly cryptographyUtils: CryptographyUtils,
   ) {}
 
+  @IsPublic()
   @Post()
   public async create(@Body() createUserDto: CreateUserDto) {
     const data = {

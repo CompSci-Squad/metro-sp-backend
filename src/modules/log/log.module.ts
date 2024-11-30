@@ -18,5 +18,8 @@ import { LogRepository } from './repositories/log.repository';
       inject: [ConfigService],
     },
   ],
+  exports: [
+    LogRepository
+  ]
 })
 export class LogModule {}
