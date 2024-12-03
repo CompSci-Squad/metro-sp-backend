@@ -5,18 +5,18 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { SearchImageDto } from './dto/search-image.dto';
-import { AISearchRepository } from './repository/ai-search.repository';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUtils } from '../../shared/utils/file.utils';
+import { SearchForImageService } from './services/search-for-image.service';
+import { IsPublic } from '../../auth/decorators/is-public.decorator';
 
 @Controller('ai')
 export class AIController {
-  constructor(private readonly aiSearchRepository: AISearchRepository) {}
+  constructor(private readonly searchForImageService: SearchForImageService) {}
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
-  async searchForImage(@UploadedFile() image: Express.Multer.File) {
-    const imageBase64 = FileUtils.toBase64(image);
-    return this.aiSearchRepository.searchByImage(imageBase64);
+  @UseInterceptors(FileInterceptor('file'))
+  async searchForImage(@UploadedFile() file) {
+    const imageBase64 = FileUtils.toBase64(file);
+    return await this.searchForImageService.searchForImage(imageBase64);
   }
 }

@@ -10,7 +10,7 @@ export class AISearchRepository {
     this.datasource = dataSource;
   }
 
-  public async searchByImage(image: string) {
-    return this.datasource.post(`${this.endpoint}`, { image });
+  public async searchByImage<T>(image: string) {
+    return this.datasource.post<T>(`${this.endpoint}`, { image });
   }
 }

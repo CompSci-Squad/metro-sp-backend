@@ -17,10 +17,11 @@ import {
 } from './services';
 import { CryptographyUtils } from '../../shared/utils/cryptography.utils';
 import { AIModule } from '../ai/ai.module';
+import { LogModule } from '../log/log.module';
 
 @Module({
   controllers: [PassengerController],
-  imports: [ConfigModule, AIModule],
+  imports: [ConfigModule, AIModule, LogModule],
   providers: [
     {
       provide: PassengerRepository,

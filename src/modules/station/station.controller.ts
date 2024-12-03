@@ -17,6 +17,7 @@ import { UpdaterService } from './services/updater.service';
 import { RemoverService } from './services/remover.service';
 import { FindOneParamsDto } from './dto/find-one-params.dto';
 import { UserPermissions } from '../user/enums/user-permissions.enum';
+import { IsPublic } from '../../auth/decorators/is-public.decorator';
 
 @Controller('station')
 export class StationController {
@@ -28,6 +29,7 @@ export class StationController {
     private readonly removerService: RemoverService,
   ) {}
 
+  @IsPublic()
   @Post()
   public async create(@Body() createStationDto: CreateStationDto) {
     return this.creatorService.create(createStationDto);
