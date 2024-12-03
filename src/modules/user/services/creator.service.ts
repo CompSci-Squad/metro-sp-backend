@@ -22,7 +22,7 @@ export class CreatorService {
       await this.userRepository.addUserToStation(station, user.id);
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException("CPF ou Email ja cadastrado", error);
     }
   }
 }
